@@ -342,7 +342,7 @@ export class MiniMap implements IPositionable {
         const previewY = blockXY.y * this.scaleFactor;
 
         // Create block preview rectangle
-        const blockRect = dom.createSvgElement(
+        dom.createSvgElement(
           Svg.RECT,
           {
             'x': previewX,
