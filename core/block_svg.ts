@@ -239,8 +239,7 @@ export class BlockSvg
     const svg = this.getSvgRoot();
     if (svg) {
       browserEvents.conditionalBind(svg, 'pointerdown', this, this.onMouseDown);
-      browserEvents.conditionalBind(svg, 'click', this, this.onBreakpointClick_);
-    }  // Add listener for breakpoint clicks
+      // Add listener for breakpoint clicks
       browserEvents.conditionalBind(svg, 'click', this, this.onBreakpointClick_);
     }
 
@@ -1203,7 +1202,7 @@ export class BlockSvg
    *
    * @param highlighted True if highlighted.
    */
- override setHighlighted(highlighted: boolean) {
+ setHighlighted(highlighted: boolean) {
     this.pathObject.updateHighlighted(highlighted);
   }
 
@@ -1248,12 +1247,11 @@ export class BlockSvg
   /**
    * Override setBreakpoint to update the rendered breakpoint.
    */
-  override setBreakpoint(breakpoint: boolean) {
-    const changed = super.setBreakpoint(breakpoint);
-    if (changed && this.rendered) {
+  setBreakpoint(breakpoint: boolean) {
+    super.setBreakpoint(breakpoint);
+    if (this.rendered) {
       this.renderBreakpoint_();
     }
-    return changed;
   }
 
   /**

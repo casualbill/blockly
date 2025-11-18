@@ -136,14 +136,6 @@ export class Block {
     return this.isExecuting_;
   }
 
-  /**
-   * Check whether this block is currently being executed.
-   * @returns True if this block is currently being executed.
-   */
-  isExecuting() {
-    return this.isExecuting_;
-  }
-
   /** An optional method called during initialization. */
   init?: () => void;
 
