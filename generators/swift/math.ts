@@ -23,9 +23,9 @@ export function math_arithmetic(block: Block, generator: SwiftGenerator): [strin
   // Basic arithmetic operators, and power.
   const OPERATORS: Record<string, [string | null, Order]> = {
     'ADD': [' + ', Order.ADDITION],
-    'MINUS': [' - ', Order.SUBTRACTION],
+    'MINUS': [' - ', Order.ADDITION],
     'MULTIPLY': [' * ', Order.MULTIPLICATION],
-    'DIVIDE': [' / ', Order.DIVISION],
+    'DIVIDE': [' / ', Order.MULTIPLICATION],
     'POWER': [null, Order.NONE], // Handle power separately.
   };
   type OperatorOption = keyof typeof OPERATORS;
@@ -59,11 +59,7 @@ export function math_single(block: Block, generator: SwiftGenerator): [string, O
     code = '-' + arg;
     return [code, Order.UNARY];
   }
-  if (operator === 'SIN' || operator === 'COS' || operator === 'TAN') {
-    arg = generator.valueToCode(block, 'NUM', Order.DIVISION) || '0';
-  } else {
-    arg = generator.valueToCode(block, 'NUM', Order.NONE) || '0';
-  }
+  arg = generator.valueToCode(block, 'NUM', Order.NONE) || '0';
   // First, handle cases which generate values that don't need parentheses
   // wrapping the code.
   switch (operator) {

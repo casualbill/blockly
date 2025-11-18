@@ -365,6 +365,8 @@ Code.renderContent = function() {
     Code.attemptCodeGeneration(dart.dartGenerator);
   } else if (content.id === 'content_lua') {
     Code.attemptCodeGeneration(lua.luaGenerator);
+  } else if (content.id === 'content_swift') {
+    Code.attemptCodeGeneration(swift.swiftGenerator);
   }
   if (typeof PR === 'object') {
     PR.prettyPrint();

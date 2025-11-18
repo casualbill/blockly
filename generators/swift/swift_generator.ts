@@ -128,11 +128,5 @@ export class SwiftGenerator extends CodeGenerator {
 
   /**
    * Generates code for the specified block.
-   * @param block The block to generate code for.
-   * @param generator The generator to use for rendering.
-   * @returns Generated code.
    */
-  static forBlock(block: Block, generator: SwiftGenerator): string | null {
-    return generator.blockToCode(block);
-  }
 }
