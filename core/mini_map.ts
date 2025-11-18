@@ -124,13 +124,79 @@ export class MiniMap implements IPositionable {
       'class': 'blocklyMiniMapToggle'
     }, this.svgGroup);
 
-    // Create zoom controls
-    this.zoomControls = dom.createSvgElement(Svg.G, {
-      'class': 'blocklyMiniMapZoom'
+    // Create zoom in button
+    const zoomInBtn = dom.createSvgElement(Svg.CIRCLE, {
+      'class': 'blocklyMiniMapZoomIn',
+      'cx': this.WIDTH - 20,
+      'cy': 35,
+      'r': 8,
+      'fill': '#4285F4',
+      'cursor': 'pointer'
     }, this.svgGroup);
+    const zoomInText = dom.createSvgElement(Svg.TEXT, {
+      'x': this.WIDTH - 20,
+      'y': 39,
+      'font-size': '12px',
+      'text-anchor': 'middle',
+      'fill': 'white',
+      'cursor': 'pointer'
+    }, this.svgGroup);
+    zoomInText.textContent = '+';
+
+    // Create zoom out button
+    const zoomOutBtn = dom.createSvgElement(Svg.CIRCLE, {
+      'class': 'blocklyMiniMapZoomOut',
+      'cx': this.WIDTH - 20,
+      'cy': 55,
+      'r': 8,
+      'fill': '#4285F4',
+      'cursor': 'pointer'
+    }, this.svgGroup);
+    const zoomOutText = dom.createSvgElement(Svg.TEXT, {
+      'x': this.WIDTH - 20,
+      'y': 59,
+      'font-size': '12px',
+      'text-anchor': 'middle',
+      'fill': 'white',
+      'cursor': 'pointer'
+    }, this.svgGroup);
+    zoomOutText.textContent = '-';
 
     // Initialize event listeners
     this.initEventListeners();
+
+    // Add zoom event listeners
+    const zoomStep = 0.25;
+    const minScale = 0.25;
+    const maxScale = 4;
+
+    const zoomInHandler = browserEvents.conditionalBind(
+      zoomInBtn, 'click', this, () => {
+        const newScale = Math.min(this.workspace.scale + zoomStep, maxScale);
+        this.workspace.scale = newScale;
+      });
+    this.boundEvents.push(zoomInHandler);
+
+    const zoomInTextHandler = browserEvents.conditionalBind(
+      zoomInText, 'click', this, () => {
+        const newScale = Math.min(this.workspace.scale + zoomStep, maxScale);
+        this.workspace.scale = newScale;
+      });
+    this.boundEvents.push(zoomInTextHandler);
+
+    const zoomOutHandler = browserEvents.conditionalBind(
+      zoomOutBtn, 'click', this, () => {
+        const newScale = Math.max(this.workspace.scale - zoomStep, minScale);
+        this.workspace.scale = newScale;
+      });
+    this.boundEvents.push(zoomOutHandler);
+
+    const zoomOutTextHandler = browserEvents.conditionalBind(
+      zoomOutText, 'click', this, () => {
+        const newScale = Math.max(this.workspace.scale - zoomStep, minScale);
+        this.workspace.scale = newScale;
+      });
+    this.boundEvents.push(zoomOutTextHandler);
 
     return this.svgGroup;
   }
@@ -219,6 +285,7 @@ export class MiniMap implements IPositionable {
    * Initializes the mini map.
    */
   init(): void {
+    console.log('MiniMap init started');
     this.workspace.getComponentManager().addComponent({
       component: this,
       weight: ComponentManager.ComponentWeight.ZOOM_CONTROLS_WEIGHT + 1,
@@ -287,6 +354,7 @@ export class MiniMap implements IPositionable {
       metrics,
       this.workspace
     );
+    console.log('MiniMap startRect:', startRect);
 
     const positionRect = uiPosition.bumpPositionRect(
       startRect,
@@ -396,6 +464,10 @@ export class MiniMap implements IPositionable {
 Css.register(`
 .blocklyMiniMap {
   cursor: pointer;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 1000;
 }
 
 .blocklyMiniMapViewport {
@@ -404,5 +476,20 @@ Css.register(`
 
 .blocklyMiniMapSvg {
   border-radius: 4px;
+}
+
+.blocklyMiniMapToggle {
+  cursor: pointer;
+}
+
+.blocklyMiniMapZoomIn,
+.blocklyMiniMapZoomOut {
+  stroke: #000;
+  stroke-width: 1px;
+}
+
+.blocklyMiniMapZoomIn:hover,
+.blocklyMiniMapZoomOut:hover {
+  fill: #1a73e8;
 }
 `);
