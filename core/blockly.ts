@@ -620,6 +620,8 @@ export {
   WorkspaceDragger,
   WorkspaceSvg,
   ZoomControls,
+  MiniMap,
+
   config,
   getFocusManager,
   hasBubble,

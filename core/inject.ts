@@ -180,6 +180,9 @@ function createMainWorkspace(
   if (wsOptions.zoomOptions && wsOptions.zoomOptions.controls) {
     mainWorkspace.addZoomControls();
   }
+  if (wsOptions.minimap) {
+    mainWorkspace.addMiniMap();
+  }
   // Register the workspace svg as a UI component.
   mainWorkspace
     .getThemeManager()
@@ -260,6 +263,9 @@ function init(mainWorkspace: WorkspaceSvg) {
   }
   if (options.zoomOptions && options.zoomOptions.controls) {
     mainWorkspace.zoomControls_!.init();
+  }
+  if (options.minimap) {
+    mainWorkspace.miniMap_!.init();
   }
 
   if (options.moveOptions && options.moveOptions.scrollbars) {
