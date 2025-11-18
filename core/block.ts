@@ -98,6 +98,52 @@ export class Block {
   /** Name of the block style. */
   protected styleName_ = '';
 
+  /** Whether this block has a breakpoint set. */
+  private hasBreakpoint_ = false;
+
+  /** Whether this block is currently being executed. */
+  private isExecuting_ = false;
+
+  /**
+   * Set whether this block has a breakpoint.
+   * @param hasBreakpoint True if this block should have a breakpoint.
+   */
+  setBreakpoint(hasBreakpoint: boolean) {
+    this.hasBreakpoint_ = hasBreakpoint;
+  }
+
+  /**
+   * Check whether this block has a breakpoint.
+   * @returns True if this block has a breakpoint.
+   */
+  hasBreakpoint() {
+    return this.hasBreakpoint_;
+  }
+
+  /**
+   * Set whether this block is currently being executed.
+   * @param isExecuting True if this block is currently being executed.
+   */
+  setExecuting(isExecuting: boolean) {
+    this.isExecuting_ = isExecuting;
+  }
+
+  /**
+   * Check whether this block is currently being executed.
+   * @returns True if this block is currently being executed.
+   */
+  isExecuting() {
+    return this.isExecuting_;
+  }
+
+  /**
+   * Check whether this block is currently being executed.
+   * @returns True if this block is currently being executed.
+   */
+  isExecuting() {
+    return this.isExecuting_;
+  }
+
   /** An optional method called during initialization. */
   init?: () => void;
 

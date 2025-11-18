@@ -19,6 +19,7 @@ import {Block} from './block.js';
 import * as blockAnimations from './block_animations.js';
 import {BlockFlyoutInflater} from './block_flyout_inflater.js';
 import {BlockSvg} from './block_svg.js';
+import {DebugController, DebugMode} from './debug_controller.js';
 import {BlocklyOptions} from './blockly_options.js';
 import {Blocks} from './blocks.js';
 import * as browserEvents from './browser_events.js';
@@ -450,6 +451,8 @@ export {
   Block,
   BlockSvg,
   BlocklyOptions,
+  DebugController,
+  DebugMode,
   Blocks,
   CollapsibleToolboxCategory,
   ComponentManager,
