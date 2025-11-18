@@ -21,6 +21,7 @@ import * as procedures from './javascript/procedures.js';
 import * as text from './javascript/text.js';
 import * as variables from './javascript/variables.js';
 import * as variablesDynamic from './javascript/variables_dynamic.js';
+import * as canvas from './javascript/canvas.js';
 
 export * from './javascript/javascript_generator.js';
 
@@ -40,6 +41,7 @@ const generators: typeof javascriptGenerator.forBlock = {
   ...text,
   ...variables,
   ...variablesDynamic,
+  ...canvas,
 };
 for (const name in generators) {
   javascriptGenerator.forBlock[name] = generators[name];
