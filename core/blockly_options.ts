@@ -39,6 +39,7 @@ export interface BlocklyOptions {
   maxTrashcanContents?: number;
   plugins?: {[key: string]: (new (...p1: any[]) => any) | string};
   zoom?: ZoomOptions;
+  minimap?: boolean;
   parentWorkspace?: WorkspaceSvg;
 }
 

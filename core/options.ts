@@ -59,6 +59,7 @@ export class Options {
   gridPattern: SVGElement | null = null;
   parentWorkspace: WorkspaceSvg | null;
   plugins: {[key: string]: (new (...p1: any[]) => any) | string};
+  minimap: boolean;
 
   /**
    * If set, sets the translation of the workspace to match the scrollbars.
@@ -191,6 +192,7 @@ export class Options {
 
     /** Map of plugin type to name of registered plugin or plugin class. */
     this.plugins = plugins;
+    this.minimap = !!options['minimap'];
   }
 
   /**

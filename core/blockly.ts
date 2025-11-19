@@ -224,6 +224,7 @@ import {WorkspaceDragger} from './workspace_dragger.js';
 import {WorkspaceSvg} from './workspace_svg.js';
 import * as Xml from './xml.js';
 import {ZoomControls} from './zoom_controls.js';
+import {MiniMap} from './mini_map.js';
 
 /**
  * Blockly core version.
@@ -620,6 +621,8 @@ export {
   WorkspaceDragger,
   WorkspaceSvg,
   ZoomControls,
+  MiniMap,
+
   config,
   getFocusManager,
   hasBubble,
