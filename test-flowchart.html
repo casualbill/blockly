@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blockly Flowchart Test</title>
+    <style>
+        body {
+            margin: 20px;
+            font-family: Arial, sans-serif;
+        }
+        #blockly-container {
+            width: 800px;
+            height: 600px;
+            border: 1px solid #ccc;
+            float: left;
+            margin-right: 20px;
+        }
+        #flowchart-container {
+            width: 800px;
+            height: 600px;
+            border: 1px solid #ccc;
+            float: left;
+            background-color: #f5f5f5;
+        }
+        #controls {
+            clear: both;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Blockly Flowchart Test</h1>
+    <div id="blockly-container"></div>
+    <div id="flowchart-container"></div>
+    
+    <div id="controls">
+        <button id="export-uml">Export UML</button>
+        <button id="optimize-layout">Optimize Layout</button>
+        <pre id="uml-output"></pre>
+    </div>
+
+    <script src="dist/blockly_compressed.js"></script>
+    <script src="dist/blocks_compressed.js"></script>
+    <script src="dist/en.js"></script>
+
+    <script>
+        // 初始化Blockly
+        const workspace = Blockly.inject('blockly-container', {
+            toolbox: {
+                "kind": "categoryToolbox",
+                "contents": [
+                    {
+                        "kind": "category",
+                        "name": "Logic",
+                        "colour": "#5C8118",
+                        "contents": [
+                            {
+                                "kind": "block",
+                                "type": "controls_if"
+                            },
+                            {
+                                "kind": "block",
+                                "type": "controls_repeat_ext"
+                            }
+                        ]
+                    },
+                    {
+                        "kind": "category",
+                        "name": "Loops",
+                        "colour": "#5C8118",
+                        "contents": [
+                            {
+                                "kind": "block",
+                                "type": "controls_whileUntil"
+                            },
+                            {
+                                "kind": "block",
+                                "type": "controls_for"
+                            }
+                        ]
+                    }
+                ]
+            }
+        });
+
+        // 初始化流程图
+        const flowchart = new Blockly.Flowchart(workspace);
+        const flowchartContainer = document.getElementById('flowchart-container');
+        flowchart.setContainer(flowchartContainer);
+
+        // 添加测试块
+        const ifBlock = workspace.newBlock('controls_if');
+        ifBlock.initSvg();
+        ifBlock.render();
+
+        const repeatBlock = workspace.newBlock('controls_repeat_ext');
+        repeatBlock.initSvg();
+        repeatBlock.render();
+
+        const moveBlock = workspace.newBlock('math_number');
+        moveBlock.initSvg();
+        moveBlock.render();
+
+        // 连接块
+        ifBlock.nextConnection.connect(repeatBlock.previousConnection);
+
+        // 导出UML
+        document.getElementById('export-uml').addEventListener('click', () => {
+            const uml = flowchart.exportUML();
+            document.getElementById('uml-output').textContent = uml;
+        });
+
+        // 优化布局
+        document.getElementById('optimize-layout').addEventListener('click', () => {
+            flowchart.optimizeLayout();
+        });
+    </script>
+</body>
+</html>
