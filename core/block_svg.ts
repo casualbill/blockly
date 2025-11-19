@@ -418,6 +418,11 @@ export class BlockSvg
     this.translation = `translate(${x}, ${y})`;
     this.relativeCoords = new Coordinate(x, y);
     this.getSvgRoot().setAttribute('transform', this.getTranslation());
+
+    // Update 3D position if using Three.js renderer
+    if (this.pathObject && typeof (this.pathObject as any).updatePosition === 'function') {
+      (this.pathObject as any).updatePosition(x, y);
+    }
   }
 
   /**

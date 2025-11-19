@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Blockly Three.js 3D Demo</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+    #blocklyDiv {
+      width: 100%;
+      height: 100vh;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+  </style>
+</head>
+<body>
+  <div id="blocklyDiv"></div>
+
+  <script src="../blockly_compressed.js"></script>
+  <script src="../blocks_compressed.js"></script>
+  <script src="../javascript_compressed.js"></script>
+  <script src="../msg/js/en.js"></script>
+
+  <script>
+    // Create a workspace with Three.js renderer
+    var workspace = Blockly.inject('blocklyDiv', {
+      toolbox: `
+        <xml>
+          <category name="Logic" colour="#5C81A6">
+            <block type="controls_if"></block>
+            <block type="logic_compare"></block>
+            <block type="logic_boolean"></block>
+          </category>
+          <category name="Loops" colour="#5CA65C">
+            <block type="controls_repeat_ext"></block>
+            <block type="controls_whileUntil"></block>
+          </category>
+          <category name="Math" colour="#A65C5C">
+            <block type="math_number"></block>
+            <block type="math_arithmetic"></block>
+            <block type="math_single"></block>
+          </category>
+        </xml>
+      `,
+      renderer: 'threejs'
+    });
+
+    // Add some initial blocks
+    var xml = `
+      <xml>
+        <block type="controls_if" x="50" y="50">
+          <mutation elseif="1" else="1"></mutation>
+          <value name="IF0">
+            <block type="logic_compare">
+              <field name="OP">EQ</field>
+              <value name="A">
+                <block type="math_number">
+                  <field name="NUM">10</field>
+                </block>
+              </value>
+              <value name="B">
+                <block type="math_number">
+                  <field name="NUM">10</field>
+                </block>
+              </value>
+            </block>
+          </value>
+          <statement name="DO0">
+            <block type="math_arithmetic">
+              <field name="OP">ADD</field>
+              <value name="A">
+                <block type="math_number">
+                  <field name="NUM">2</field>
+                </block>
+              </value>
+              <value name="B">
+                <block type="math_number">
+                  <field name="NUM">3</field>
+                </block>
+              </value>
+            </block>
+          </statement>
+        </block>
+      </xml>
+    `;
+    Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(xml), workspace);
+  </script>
+</body>
+</html>
