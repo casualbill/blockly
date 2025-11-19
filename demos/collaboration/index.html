@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Blockly Collaboration Demo</title>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            font-family: Arial, sans-serif;
+        }
+        #blocklyDiv {
+            height: 100vh;
+            width: 70%;
+            float: left;
+        }
+        #collabPanel {
+            width: 30%;
+            height: 100vh;
+            float: left;
+            border-left: 1px solid #ccc;
+            padding: 10px;
+            box-sizing: border-box;
+            background-color: #f5f5f5;
+            overflow-y: auto;
+        }
+        #chatArea {
+            margin-top: 20px;
+        }
+        #chatMessages {
+            height: 200px;
+            overflow-y: auto;
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: white;
+        }
+        #chatInput {
+            width: 80%;
+            padding: 5px;
+        }
+        #sendChat {
+            width: 18%;
+            padding: 5px;
+        }
+        .userList {
+            list-style-type: none;
+            padding: 0;
+        }
+        .userItem {
+            margin-bottom: 5px;
+            padding: 5px;
+            border-radius: 3px;
+        }
+        .chatMessage {
+            margin-bottom: 5px;
+        }
+        .username {
+            font-weight: bold;
+        }
+        .connectionStatus {
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+    </style>
+    <script src="../../build/src/blockly_compressed.js"></script>
+    <script src="../../build/src/blocks_compressed.js"></script>
+    <script src="../../build/src/generators/javascript_compressed.js"></script>
+    <script src="../../build/src/msg/js/en.js"></script>
+    <script src="../../build/src/core/collaboration.js"></script>
+</head>
+<body>
+    <div id="blocklyDiv"></div>
+    <div id="collabPanel">
+        <div class="connectionStatus">
+            Connection Status: <span id="status">Disconnected</span>
+        </div>
+        <h3>Online Users</h3>
+        <ul id="userList" class="userList"></ul>
+        <div id="chatArea">
+            <h3>Chat</h3>
+            <div id="chatMessages"></div>
+            <input type="text" id="chatInput" placeholder="Type a message...">
+            <button id="sendChat">Send</button>
+        </div>
+    </div>
+
+    <script>
+        // 创建工具box定义
+        var toolbox = {
+            "kind": "categoryToolbox",
+            "contents": [
+                {
+                    "kind": "category",
+                    "name": "Logic",
+                    "contents": [
+                        {"kind": "block", "type": "controls_if"},
+                        {"kind": "block", "type": "logic_compare"},
+                        {"kind": "block", "type": "logic_operation"},
+                        {"kind": "block", "type": "logic_negate"},
+                        {"kind": "block", "type": "logic_boolean"}
+                    ]
+                },
+                {
+                    "kind": "category",
+                    "name": "Loops",
+                    "contents": [
+                        {"kind": "block", "type": "controls_repeat_ext"},
+                        {"kind": "block", "type": "controls_whileUntil"},
+                        {"kind": "block", "type": "controls_for"},
+                        {"kind": "block", "type": "controls_forEach"}
+                    ]
+                },
+                {
+                    "kind": "category",
+                    "name": "Math",
+                    "contents": [
+                        {"kind": "block", "type": "math_number"},
+                        {"kind": "block", "type": "math_arithmetic"},
+                        {"kind": "block", "type": "math_single"},
+                        {"kind": "block", "type": "math_round"}
+                    ]
+                },
+                {
+                    "kind": "category",
+                    "name": "Text",
+                    "contents": [
+                        {"kind": "block", "type": "text"},
+                        {"kind": "block", "type": "text_append"},
+                        {"kind": "block", "type": "text_length"},
+                        {"kind": "block", "type": "text_print"}
+                    ]
+                },
+                {
+                    "kind": "button",
+                    "text": "Collaborate",
+                    "callbackKey": "COLLABORATE"
+                }
+            ]
+        };
+
+        // 初始化Blockly
+        var workspace = Blockly.inject('blocklyDiv', {
+            toolbox: toolbox,
+            trashcan: true,
+            zoom: {
+                controls: true,
+                wheel: true,
+                startScale: 1.0,
+                maxScale: 3,
+                minScale: 0.3,
+                scaleSpeed: 1.2
+            }
+        });
+
+        // 初始化协作功能
+        var collabManager = Blockly.initCollaboration(workspace);
+        
+        // 注册协作按钮回调
+        workspace.registerButtonCallback('COLLABORATE', function(button) {
+            // 连接到协作服务器
+            collabManager.connect('ws://localhost:8000');
+        });
+
+        // 更新连接状态
+        function updateConnectionStatus() {
+            var statusElement = document.getElementById('status');
+            var status = collabManager.getConnectionStatus();
+            statusElement.textContent = status;
+            statusElement.style.color = status === 'connected' ? 'green' : status === 'connecting' ? 'orange' : 'red';
+        }
+
+        // 更新用户列表
+        function updateUserList() {
+            var userListElement = document.getElementById('userList');
+            var collaborators = collabManager.getCollaborators();
+            userListElement.innerHTML = '';
+            
+            collaborators.forEach(function(user) {
+                var listItem = document.createElement('li');
+                listItem.className = 'userItem';
+                listItem.style.backgroundColor = user.color;
+                listItem.style.color = '#fff';
+                listItem.textContent = user.username;
+                userListElement.appendChild(listItem);
+            });
+        }
+
+        // 添加聊天消息
+        function addChatMessage(message) {
+            var chatMessagesElement = document.getElementById('chatMessages');
+            var messageElement = document.createElement('div');
+            messageElement.className = 'chatMessage';
+            messageElement.innerHTML = '<span class="username" style="color: ' + message.color + '">' + message.username + ':</span> ' + message.message;
+            chatMessagesElement.appendChild(messageElement);
+            chatMessagesElement.scrollTop = chatMessagesElement.scrollHeight;
+        }
+
+        // 定期更新连接状态和用户列表
+        setInterval(function() {
+            updateConnectionStatus();
+            updateUserList();
+        }, 500);
+
+        // 监听聊天事件
+        workspace.addEventListener('collabChat', function(e) {
+            addChatMessage(e.detail);
+        });
+
+        // 发送聊天消息
+        document.getElementById('sendChat').addEventListener('click', function() {
+            var chatInput = document.getElementById('chatInput');
+            var message = chatInput.value.trim();
+            if (message) {
+                collabManager.sendChatMessage(message);
+                chatInput.value = '';
+            }
+        });
+
+        // 回车键发送聊天消息
+        document.getElementById('chatInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                var chatInput = document.getElementById('chatInput');
+                var message = chatInput.value.trim();
+                if (message) {
+                    collabManager.sendChatMessage(message);
+                    chatInput.value = '';
+                }
+            }
+        });
+
+        // 初始化
+        updateConnectionStatus();
+        updateUserList();
+    </script>
+</body>
+</html>

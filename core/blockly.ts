@@ -433,6 +433,7 @@ Names.prototype.populateProcedures = function (
 };
 // clang-format on
 
+export * from './collaboration.js';
 export * from './flyout_navigator.js';
 export * from './interfaces/i_navigation_policy.js';
 export * from './keyboard_nav/block_navigation_policy.js';
