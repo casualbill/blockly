@@ -1,0 +1,235 @@
+// AI Chat Module - JavaScript version to avoid TypeScript issues
+
+// AI Chat History
+let chatHistory = [];
+
+// Model Instance
+let model = null;
+
+// Loading Status
+let isLoading = false;
+
+// Error State
+let lastError = null;
+
+// Load Animation Element
+let loadingElement = null;
+
+// WebLLM Functions
+let init;
+let generate;
+let stopGenerate;
+let releaseModel;
+
+// Model mappings
+const modelMappings = {
+  'llama3': 'Llama-3-8B-Instruct-q4f16_1-MLC',
+  'mistral': 'Mistral-7B-Instruct-v0.3-q4f16_1-MLC',
+  'qwen': 'Qwen-7B-Chat-q4f16_1-MLC'
+};
+
+// Initialize Loading Animation
+function initLoadingAnimation() {
+  if (!loadingElement) {
+    loadingElement = document.createElement('div');
+    loadingElement.className = 'blockly-ai-loading';
+    loadingElement.innerHTML = `
+      <div class="blockly-ai-loading-spinner"></div>
+      <div class="blockly-ai-loading-text">AI Generating...</div>
+    `;
+    // Add CSS styling
+    const style = document.createElement('style');
+    style.textContent = `
+      .blockly-ai-loading {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: rgba(255, 255, 255, 0.95);
+        padding: 20px 40px;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        font-family: sans-serif;
+        z-index: 10000;
+        display: none;
+        align-items: center;
+        gap: 15px;
+      }
+      .blockly-ai-loading-spinner {
+        width: 24px;
+        height: 24px;
+        border: 3px solid #f3f3f3;
+        border-top: 3px solid #3498db;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+      .blockly-ai-loading-text {
+        color: #333;
+        font-size: 16px;
+        font-weight: 500;
+      }
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+    `;
+    document.head.appendChild(style);
+    document.body.appendChild(loadingElement);
+  }
+}
+
+// Show Loading Animation
+function showLoading() {
+  initLoadingAnimation();
+  if (loadingElement) {
+    loadingElement.style.display = 'flex';
+  }
+}
+
+// Hide Loading Animation
+function hideLoading() {
+  if (loadingElement) {
+    loadingElement.style.display = 'none';
+  }
+}
+
+// Load WebLLM from CDN
+async function loadWebLLM() {
+  try {
+    // Skip Closure Compiler check for dynamic import
+    // @suppress {moduleLoad} Dynamic import is needed for WebLLM
+    const webllm = await import('https://esm.run/@mlc-ai/web-llm');
+    init = webllm.init;
+    generate = webllm.generate;
+    stopGenerate = webllm.stopGenerate;
+    releaseModel = webllm.releaseModel;
+    return true;
+  } catch (error) {
+    console.error('Failed to load WebLLM from CDN:', error);
+    return false;
+  }
+}
+
+// Initialize AI Chat
+async function initAiChat(selectedModel = 'llama3') {
+  try {
+    isLoading = true;
+    
+    // Load WebLLM first
+    const webllmLoaded = await loadWebLLM();
+    if (!webllmLoaded) {
+      throw new Error('Failed to load WebLLM library');
+    }
+    
+    // Get model name from mapping
+    const modelName = modelMappings[selectedModel] || modelMappings['llama3'];
+    
+    // Initialize model
+    model = await init({
+      model: modelName,
+      cachePath: `https://huggingface.co/mlc-ai/mlc-chat-${modelName}/resolve/main/`,
+      libPath: 'https://esm.run/@mlc-ai/web-llm/lib/'
+    });
+    isLoading = false;
+    return true;
+  } catch (error) {
+    isLoading = false;
+    lastError = error;
+    console.error('Failed to initialize AI model:', error);
+    return false;
+  }
+}
+
+// AI Chat Function
+async function aiChat(prompt, options = {}) {
+  try {
+    showLoading();
+    
+    // Ensure WebLLM is loaded
+    const webllmLoaded = await loadWebLLM();
+    if (!webllmLoaded) {
+      throw new Error('Failed to load WebLLM library');
+    }
+    
+    // Initialize or switch model if needed
+    const targetModel = options.model || 'llama3';
+    if (!model) {
+      await initAiChat(targetModel);
+      if (!model) {
+        throw new Error('Failed to load AI model');
+      }
+    }
+    
+    // Add user message to history
+    chatHistory.push({ role: 'user', content: prompt });
+    
+    // Format history for model input
+    const input = chatHistory.map(msg => `${msg.role}: ${msg.content}`).join('\n');
+    
+    // Generate response
+    let response = '';
+    await generate(
+      model, 
+      input,
+      {
+        temperature: options.temperature || 0.8,
+        top_p: options.topP || 0.9,
+        max_gen_len: options.maxTokens || 512,
+        onUpdate: (partialResponse) => {
+          response += partialResponse;
+        }
+      }
+    );
+    
+    // Add assistant response to history
+    chatHistory.push({ role: 'assistant', content: response });
+    
+    hideLoading();
+    return response;
+  } catch (error) {
+    hideLoading();
+    lastError = error;
+    console.error('AI Chat Error:', error);
+    throw error;
+  }
+}
+
+// Check if model is loaded
+function aiModelLoaded() {
+  return model !== null;
+}
+
+// Clear chat history
+function aiClearHistory() {
+  chatHistory = [];
+}
+
+// Stop generating
+function aiStopGenerate() {
+  if (model) {
+    stopGenerate(model);
+  }
+  hideLoading();
+}
+
+// Release model
+function aiReleaseModel() {
+  if (model) {
+    releaseModel(model);
+    model = null;
+  }
+}
+
+// Export functions to window
+window.aiChat = aiChat;
+window.aiModelLoaded = aiModelLoaded;
+window.aiClearHistory = aiClearHistory;
+window.aiStopGenerate = aiStopGenerate;
+window.aiReleaseModel = aiReleaseModel;
+
+// Load model when page loads
+document.addEventListener('DOMContentLoaded', () => {
+  initAiChat().catch(error => {
+    console.error('Failed to initialize AI on page load:', error);
+  });
+});
