@@ -23,6 +23,7 @@ import * as variables from './javascript/variables.js';
 import * as variablesDynamic from './javascript/variables_dynamic.js';
 
 export * from './javascript/javascript_generator.js';
+export * from './javascript/http.js';
 
 /**
  * JavaScript code generator instance.

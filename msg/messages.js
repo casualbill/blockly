@@ -1693,3 +1693,76 @@ Blockly.Msg.KEYBOARD_NAV_COPIED_HINT = 'Copied. Press %1 to paste.';
 /** @type {string} */
 /// Message shown when an item is cut in keyboard navigation mode.
 Blockly.Msg.KEYBOARD_NAV_CUT_HINT = 'Cut. Press %1 to paste.';
+
+/** @type {string} */
+/// Title for HTTP request block.
+Blockly.Msg.HTTP_REQUEST_TITLE = 'HTTP %1 %2 headers %3 body %4 timeout %5s auth %6 %7';
+/** @type {string} */
+/// Tooltip for HTTP request block.
+Blockly.Msg.HTTP_REQUEST_TOOLTIP = 'Send HTTP request and return response';
+/** @type {string} */
+/// Help URL for HTTP request block.
+Blockly.Msg.HTTP_REQUEST_HELPURL = 'https://developers.google.com/blockly/guides/create-custom-blocks';
+/** @type {string} */
+/// Seconds suffix for timeout field.
+Blockly.Msg.HTTP_REQUEST_SECONDS = 's';
+
+/** @type {string} */
+/// Title for HTTP response status block.
+Blockly.Msg.HTTP_RESPONSE_STATUS_TITLE = 'response status %1';
+/** @type {string} */
+/// Tooltip for HTTP response status block.
+Blockly.Msg.HTTP_RESPONSE_STATUS_TOOLTIP = 'Get HTTP response status code';
+
+/** @type {string} */
+/// Title for HTTP response body block.
+Blockly.Msg.HTTP_RESPONSE_BODY_TITLE = 'response body %1';
+/** @type {string} */
+/// Tooltip for HTTP response body block.
+Blockly.Msg.HTTP_RESPONSE_BODY_TOOLTIP = 'Get HTTP response body';
+
+/** @type {string} */
+/// Title for HTTP response headers block.
+Blockly.Msg.HTTP_RESPONSE_HEADERS_TITLE = 'response headers %1';
+/** @type {string} */
+/// Tooltip for HTTP response headers block.
+Blockly.Msg.HTTP_RESPONSE_HEADERS_TOOLTIP = 'Get HTTP response headers';
+
+/** @type {string} */
+/// Title for HTTP is success block.
+Blockly.Msg.HTTP_IS_SUCCESS_TITLE = 'response is success %1';
+/** @type {string} */
+/// Tooltip for HTTP is success block.
+Blockly.Msg.HTTP_IS_SUCCESS_TOOLTIP = 'Check if HTTP response status is between 200-299';
+
+/** @type {string} */
+/// Title for HTTP create headers block.
+Blockly.Msg.HTTP_CREATE_HEADERS_TITLE = 'create headers';
+/** @type {string} */
+/// Tooltip for HTTP create headers block.
+Blockly.Msg.HTTP_CREATE_HEADERS_TOOLTIP = 'Create custom HTTP headers';
+
+/** @type {string} */
+/// Title for HTTP create body block.
+Blockly.Msg.HTTP_CREATE_BODY_TITLE = 'create body %1 %2';
+/** @type {string} */
+/// Tooltip for HTTP create body block.
+Blockly.Msg.HTTP_CREATE_BODY_TOOLTIP = 'Create HTTP request body with specified format';
+
+/** @type {string} */
+/// Title for HTTP on success block.
+Blockly.Msg.HTTP_ON_SUCCESS_TITLE = 'on success';
+/** @type {string} */
+/// Tooltip for HTTP on success block.
+Blockly.Msg.HTTP_ON_SUCCESS_TOOLTIP = 'Handle successful HTTP response';
+
+/** @type {string} */
+/// Title for HTTP on error block.
+Blockly.Msg.HTTP_ON_ERROR_TITLE = 'on error';
+/** @type {string} */
+/// Tooltip for HTTP on error block.
+Blockly.Msg.HTTP_ON_ERROR_TOOLTIP = 'Handle HTTP request error';
+
+/** @type {string} */
+/// Hue value for all HTTP blocks.
+Blockly.Msg.HTTP_HUE = '290';

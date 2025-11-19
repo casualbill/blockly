@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HTTP Blocks Test</title>
+  <script src="../build/blockly_compressed.js"></script>
+  <script src="../build/blocks_compressed.js"></script>
+  <script src="../build/javascript_compressed.js"></script>
+  <style>
+    body {
+      display: flex;
+      margin: 0;
+      padding: 20px;
+      font-family: Arial, sans-serif;
+    }
+    #blocklyDiv {
+      width: 600px;
+      height: 600px;
+      border: 1px solid #ccc;
+    }
+    #codeDiv {
+      margin-left: 20px;
+      width: 500px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      font-family: monospace;
+      white-space: pre-wrap;
+    }
+    #runBtn {
+      margin: 10px 0;
+      padding: 10px 20px;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+  <div id="blocklyDiv"></div>
+  <div>
+    <h3>Generated Code</h3>
+    <div id="codeDiv"></div>
+    <button id="runBtn">Run Code</button>
+    <h3>Output</h3>
+    <div id="outputDiv"></div>
+  </div>
+
+  <script>
+    // Create workspace
+    const workspace = Blockly.inject('blocklyDiv', {
+      toolbox: {
+        "kind": "categoryToolbox",
+        "contents": [
+          {
+            "kind": "category",
+            "name": "HTTP",
+            "colour": 290,
+            "contents": [
+              {
+                "kind": "block",
+                "type": "http_request"
+              },
+              {
+                "kind": "block",
+                "type": "http_response_status"
+              },
+              {
+                "kind": "block",
+                "type": "http_response_body"
+              },
+              {
+                "kind": "block",
+                "type": "http_response_headers"
+              },
+              {
+                "kind": "block",
+                "type": "http_is_success"
+              },
+              {
+                "kind": "block",
+                "type": "http_create_headers"
+              },
+              {
+                "kind": "block",
+                "type": "http_create_body"
+              },
+              {
+                "kind": "block",
+                "type": "http_on_success"
+              },
+              {
+                "kind": "block",
+                "type": "http_on_error"
+              }
+            ]
+          },
+          {
+            "kind": "category",
+            "name": "Text",
+            "colour": 160,
+            "contents": [
+              {
+                "kind": "block",
+                "type": "text"
+              }
+            ]
+          },
+          {
+            "kind": "category",
+            "name": "Variables",
+            "colour": 330,
+            "contents": [
+              {
+                "kind": "block",
+                "type": "variables_get"
+              },
+              {
+                "kind": "block",
+                "type": "variables_set"
+              }
+            ]
+          }
+        ]
+      }
+    });
+
+    // Generate and display code
+    function updateCode() {
+      const code = Blockly.JavaScript.workspaceToCode(workspace);
+      document.getElementById('codeDiv').textContent = code;
+    }
+
+    workspace.addChangeListener(updateCode);
+
+    // Run code
+    document.getElementById('runBtn').addEventListener('click', () => {
+      const outputDiv = document.getElementById('outputDiv');
+      outputDiv.innerHTML = '<h4>Running...</h4>';
+      
+      try {
+        // Make debug mode available
+        window.Blockly = window.Blockly || {};
+        window.Blockly.debugMode = true;
+        
+        // Create a simple mock for XMLHttpRequest
+        const originalXhr = window.XMLHttpRequest;
+        window.XMLHttpRequest = function() {
+          const mockXhr = {};
+          mockXhr.open = function(method, url, async) {
+            this.method = method;
+            this.url = url;
+            this.async = async;
+          };
+          mockXhr.setRequestHeader = function(key, value) {
+            this.headers = this.headers || {};
+            this.headers[key] = value;
+          };
+          mockXhr.send = function(body) {
+            this.body = body;
+            // Simulate response after 500ms
+            setTimeout(() => {
+              this.status = 200;
+              this.responseText = JSON.stringify({message: 'Hello from mock API'});
+              this.getAllResponseHeaders = function() {
+                return 'Content-Type: application/json\nX-Custom-Header: test';
+              };
+              if (this.onload) {
+                this.onload();
+              }
+            }, 500);
+          };
+          mockXhr.timeout = 0;
+          mockXhr.ontimeout = null;
+          mockXhr.onerror = null;
+          return mockXhr;
+        };
+
+        // Execute generated code
+        const code = Blockly.JavaScript.workspaceToCode(workspace);
+        const result = eval(code);
+        
+        // Restore original XMLHttpRequest
+        window.XMLHttpRequest = originalXhr;
+        
+        outputDiv.innerHTML += '<h4>Result:</h4><pre>' + JSON.stringify(result, null, 2) + '</pre>';
+      } catch (error) {
+        outputDiv.innerHTML += '<h4>Error:</h4><pre>' + error.message + '</pre>';
+      }
+    });
+  </script>
+</body>
+</html>
