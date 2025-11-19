@@ -534,6 +534,9 @@ function compile(options) {
       'node_modules',
     ],
     define: ['COMPILED=true'],
+    module_resolution: 'NODE',
+    js_module_root: 'node_modules',
+    externs: ['threejs/externs.js'],
   };
   if (argv.debug || argv.strict) {
     defaultOptions.jscomp_error = [...JSCOMP_ERROR];

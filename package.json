@@ -110,6 +110,7 @@
     "@hyperjump/json-schema": "^1.5.0",
     "@microsoft/api-documenter": "7.22.4",
     "@microsoft/api-extractor": "^7.29.5",
+    "@types/three": "^0.181.0",
     "ajv": "^8.17.1",
     "async-done": "^2.0.0",
     "chai": "^6.0.1",
@@ -150,7 +151,8 @@
     "yargs": "^17.2.1"
   },
   "dependencies": {
-    "jsdom": "26.1.0"
+    "jsdom": "26.1.0",
+    "three": "^0.181.2"
   },
   "engines": {
     "node": ">=18"
