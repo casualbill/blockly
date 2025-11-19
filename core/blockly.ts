@@ -47,6 +47,7 @@ import * as dragging from './dragging.js';
 import * as dropDownDiv from './dropdowndiv.js';
 import * as Events from './events/events.js';
 import * as Extensions from './extensions.js';
+import {Flowchart} from './flowchart.js';
 import {
   Field,
   FieldConfig,
@@ -224,7 +225,7 @@ import {WorkspaceDragger} from './workspace_dragger.js';
 import {WorkspaceSvg} from './workspace_svg.js';
 import * as Xml from './xml.js';
 import {ZoomControls} from './zoom_controls.js';
-
+import {Flowchart} from './flowchart.js';
 /**
  * Blockly core version.
  * This constant is overridden by the build script (npm run build) to the value
@@ -494,6 +495,7 @@ export {
   uiPosition,
   utils,
   zelos,
+  Flowchart,
 };
 export const DropDownDiv = dropDownDiv;
 export {
@@ -620,6 +622,7 @@ export {
   WorkspaceDragger,
   WorkspaceSvg,
   ZoomControls,
+  Flowchart,
   config,
   getFocusManager,
   hasBubble,
