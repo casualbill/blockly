@@ -61,6 +61,23 @@ export class Options {
   plugins: {[key: string]: (new (...p1: any[]) => any) | string};
 
   /**
+   * Smart suggestions configuration.
+   */
+  smartSuggestions: {
+    enabled: boolean;
+    triggerConditions: {
+      onDrag: boolean;
+      onClick: boolean;
+      onInput: boolean;
+    };
+    displaySettings: {
+      showPreview: boolean;
+      showDescription: boolean;
+      position: string;
+    };
+  };
+
+  /**
    * If set, sets the translation of the workspace to match the scrollbars.
    * A function that
    *     sets the translation of the workspace to match the scrollbars. The
@@ -191,6 +208,22 @@ export class Options {
 
     /** Map of plugin type to name of registered plugin or plugin class. */
     this.plugins = plugins;
+
+    // Smart suggestions configuration with defaults
+    const rawSmartSuggestions = options['smartSuggestions'] || {};
+    this.smartSuggestions = {
+      enabled: rawSmartSuggestions['enabled'] !== false,
+      triggerConditions: {
+        onDrag: rawSmartSuggestions['triggerConditions']?.['onDrag'] !== false,
+        onClick: rawSmartSuggestions['triggerConditions']?.['onClick'] !== false,
+        onInput: rawSmartSuggestions['triggerConditions']?.['onInput'] !== false
+      },
+      displaySettings: {
+        showPreview: rawSmartSuggestions['displaySettings']?.['showPreview'] !== false,
+        showDescription: rawSmartSuggestions['displaySettings']?.['showDescription'] !== false,
+        position: rawSmartSuggestions['displaySettings']?.['position'] || 'bottom-right'
+      }
+    };
   }
 
   /**

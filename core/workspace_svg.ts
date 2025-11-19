@@ -94,6 +94,7 @@ import * as WidgetDiv from './widgetdiv.js';
 import {Workspace} from './workspace.js';
 import {WorkspaceAudio} from './workspace_audio.js';
 import {ZoomControls} from './zoom_controls.js';
+import {SmartSuggestions} from './smart_suggestions.js';
 
 /** Margin around the top/bottom/left/right after a zoomToFit call. */
 const ZOOM_TO_FIT_MARGIN = 20;
@@ -111,6 +112,11 @@ export class WorkspaceSvg
    * You can pass the result to `eventHandling.unbind`.
    */
   private resizeHandlerWrapper: browserEvents.Data | null = null;
+
+  /**
+   * Smart suggestions manager for this workspace.
+   */
+  private smartSuggestions_: SmartSuggestions | null = null;
 
   /**
    * The render status of an SVG workspace.
@@ -432,6 +438,11 @@ export class WorkspaceSvg
      * Used to compute svg metrics.
      */
     this.cachedParentSvgSize = new Size(0, 0);
+
+    /**
+     * Smart suggestions feature for the workspace.
+     */
+    this.smartSuggestions_ = new SmartSuggestions(this, this.options);
   }
 
   /**
@@ -895,6 +906,11 @@ export class WorkspaceSvg
 
     this.renderer.dispose();
     this.markerManager.dispose();
+
+    // Dispose smart suggestions
+    if (this.smartSuggestions_) {
+      this.smartSuggestions_.dispose();
+    }
 
     super.dispose();
 

@@ -16,6 +16,7 @@ import './events/events_ui_base.js';
 import './events/events_var_create.js';
 
 import {Block} from './block.js';
+import {SmartSuggestions} from './smart_suggestions.js';
 import * as blockAnimations from './block_animations.js';
 import {BlockFlyoutInflater} from './block_flyout_inflater.js';
 import {BlockSvg} from './block_svg.js';
@@ -619,6 +620,7 @@ export {
   WorkspaceAudio,
   WorkspaceDragger,
   WorkspaceSvg,
+  SmartSuggestions,
   ZoomControls,
   config,
   getFocusManager,

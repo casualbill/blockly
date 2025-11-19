@@ -40,6 +40,25 @@ export interface BlocklyOptions {
   plugins?: {[key: string]: (new (...p1: any[]) => any) | string};
   zoom?: ZoomOptions;
   parentWorkspace?: WorkspaceSvg;
+  smartSuggestions?: SmartSuggestionsOptions;
+}
+
+export interface SmartSuggestionsOptions {
+  enabled?: boolean;
+  triggerConditions?: SmartSuggestionsTriggerConditions;
+  displaySettings?: SmartSuggestionsDisplaySettings;
+}
+
+export interface SmartSuggestionsTriggerConditions {
+  onDrag?: boolean;
+  onClick?: boolean;
+  onInput?: boolean;
+}
+
+export interface SmartSuggestionsDisplaySettings {
+  showPreview?: boolean;
+  showDescription?: boolean;
+  position?: string;
 }
 
 export interface GridOptions {
