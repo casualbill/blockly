@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Blockly Canvas Renderer Test</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 20px;
+        font-family: Arial, sans-serif;
+      }
+      #blocklyDiv {
+        width: 800px;
+        height: 600px;
+        border: 1px solid #ccc;
+      }
+      .controls {
+        margin-bottom: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Blockly Canvas Renderer Test</h1>
+    <div class="controls">
+      <button onclick="addBlock()">Add Block</button>
+      <button onclick="changeRenderer('canvas')">Canvas Renderer</button>
+      <button onclick="changeRenderer('geras')">Geras Renderer</button>
+    </div>
+    <div id="blocklyDiv"></div>
+
+    <script src="build/blockly_compressed.js"></script>
+    <script src="build/blocks_compressed.js"></script>
+    <script src="build/en.js"></script>
+
+    <script>
+      // Create workspace with Canvas renderer
+      var workspace = Blockly.inject('blocklyDiv', {
+        renderer: 'canvas',
+        toolbox: {
+          'kind': 'flyoutToolbox',
+          'contents': [
+            {
+              'kind': 'block',
+              'type': 'controls_if',
+            },
+            {
+              'kind': 'block',
+              'type': 'controls_whileUntil',
+            },
+            {
+              'kind': 'block',
+              'type': 'math_number',
+            },
+            {
+              'kind': 'block',
+              'type': 'text',
+            },
+          ],
+        },
+      });
+
+      function addBlock() {
+        // Create a new block and add it to the workspace
+        var block = workspace.newBlock('math_number');
+        block.setFieldValue(Math.random().toFixed(2), 'NUM');
+        block.initSvg();
+        block.render();
+        block.setRelativeToSurfaceXY(100, 100);
+      }
+
+      function changeRenderer(rendererName) {
+        // This is a simplified example - in real Blockly, you can't change renderer dynamically
+        alert(
+          'Renderer change would require reinitializing the workspace.\nCurrent renderer: ' +
+            rendererName,
+        );
+      }
+
+      // Log workspace events
+      workspace.addChangeListener(function (e) {
+        if (
+          e.type === Blockly.Events.BLOCK_CREATE ||
+          e.type === Blockly.Events.BLOCK_MOVE
+        ) {
+          console.log('Block event:', e);
+        }
+      });
+    </script>
+  </body>
+</html>
