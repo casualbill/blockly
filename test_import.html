@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Blockly Import Test</title>
+  <script src="build/src/core/blockly.js"></script>
+  <script src="build/src/generators/javascript.js"></script>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+    }
+    #blocklyDiv {
+      height: 480px;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div id="blocklyDiv"></div>
+  <xml id="toolbox" style="display: none;">
+    <category name="Logic" colour="210">
+      <block type="controls_if"></block>
+      <block type="logic_compare"></block>
+      <block type="logic_operation"></block>
+      <block type="logic_negate"></block>
+      <block type="logic_boolean"></block>
+      <block type="logic_null"></block>
+      <block type="logic_ternary"></block>
+    </category>
+    <category name="Loops" colour="120">
+      <block type="controls_repeat_ext"></block>
+      <block type="controls_whileUntil"></block>
+      <block type="controls_for"></block>
+      <block type="controls_forEach"></block>
+    </category>
+    <category name="Math" colour="230">
+      <block type="math_number"></block>
+      <block type="math_arithmetic"></block>
+      <block type="math_single"></block>
+      <block type="math_trig"></block>
+      <block type="math_constant"></block>
+      <block type="math_number_property"></block>
+    </category>
+    <category name="Text" colour="160">
+      <block type="text"></block>
+      <block type="text_join"></block>
+      <block type="text_append"></block>
+      <block type="text_length"></block>
+      <block type="text_indexOf"></block>
+      <block type="text_charAt"></block>
+    </category>
+    <category name="Variables" colour="330">
+      <block type="variables_get"></block>
+      <block type="variables_set"></block>
+    </category>
+    <sep></sep>
+    <button kind="import_button" text="Import Script"></button>
+  </xml>
+  <script>
+    // 注册导入按钮
+    Blockly.registry.register(Blockly.registry.Type.TOOLBOX_ITEM, 'import_button', Blockly.ImportButton);
+    
+    // 创建工作区
+    var workspace = Blockly.inject('blocklyDiv', {
+      toolbox: document.getElementById('toolbox'),
+      zoom: {
+        controls: true,
+        wheel: true,
+        startScale: 1.0,
+        maxScale: 3,
+        minScale: 0.3,
+        scaleSpeed: 1.2
+      }
+    });
+  </script>
+</body>
+</html>

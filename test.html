@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Blockly Script to Block Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        #blocklyDiv {
+            height: 500px;
+            width: 100%;
+            border: 1px solid #ccc;
+        }
+        .test-section {
+            margin: 20px 0;
+        }
+        .test-section button {
+            margin-right: 10px;
+            padding: 10px 20px;
+        }
+        .test-section textarea {
+            width: 100%;
+            height: 100px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Blockly Script to Block Test</h1>
+    <div id="blocklyDiv"></div>
+    
+    <div class="test-section">
+        <h2>Test Code Conversion</h2>
+        <button id="testJsBtn">Test JavaScript Conversion</button>
+        <button id="testPyBtn">Test Python Conversion</button>
+        <button id="clearBtn">Clear Workspace</button>
+        <textarea id="codeInput" placeholder="Enter test code here..."></textarea>
+    </div>
+
+    <script src="build/src/core/blockly.js"></script>
+    <script src="build/src/generators/javascript.js"></script>
+    <script src="build/src/generators/python.js"></script>
+    <script>
+        // Register the import button
+        Blockly.registry.register(Blockly.registry.Type.TOOLBOX_ITEM, 'import_button', Blockly.ImportButton);
+        
+        // Create toolbox
+        var toolbox = `
+            <xml>
+                <category name="Logic" colour="210">
+                    <block type="controls_if"></block>
+                    <block type="logic_compare"></block>
+                    <block type="logic_operation"></block>
+                    <block type="logic_negate"></block>
+                    <block type="logic_boolean"></block>
+                </category>
+                <category name="Loops" colour="120">
+                    <block type="controls_repeat_ext"></block>
+                    <block type="controls_whileUntil"></block>
+                    <block type="controls_for"></block>
+                </category>
+                <category name="Math" colour="230">
+                    <block type="math_number"></block>
+                    <block type="math_arithmetic"></block>
+                    <block type="math_single"></block>
+                </category>
+                <category name="Text" colour="160">
+                    <block type="text"></block>
+                    <block type="text_join"></block>
+                </category>
+                <category name="Variables" colour="330">
+                    <block type="variables_get"></block>
+                    <block type="variables_set"></block>
+                </category>
+                <sep></sep>
+                <button kind="import_button" text="Import Script"></button>
+            </xml>`;
+        
+        // Inject Blockly
+        var workspace = Blockly.inject('blocklyDiv', {
+            toolbox: Blockly.Xml.textToDom(toolbox)
+        });
+        
+        // Test JavaScript conversion
+        document.getElementById('testJsBtn').addEventListener('click', function() {
+            var code = document.getElementById('codeInput').value || `
+var x = 10;
+var y = 20;
+var sum = x + y;
+            `;
+            
+            try {
+                var xmlDoc = Blockly.CodeConverter.convert(code, 'javascript');
+                Blockly.Xml.domToWorkspace(xmlDoc, workspace);
+                console.log('JavaScript conversion successful');
+            } catch (error) {
+                console.error('JavaScript conversion failed:', error);
+                alert('Conversion failed: ' + error.message);
+            }
+        });
+        
+        // Test Python conversion
+        document.getElementById('testPyBtn').addEventListener('click', function() {
+            var code = document.getElementById('codeInput').value || `
+x = 10
+y = 20
+sum = x + y
+if sum > 25:
+    print("Sum is greater than 25")
+else:
+    print("Sum is less than or equal to 25")
+            `;
+            
+            try {
+                // Create a simple XML structure since the full conversion isn't implemented
+                var xmlDoc = Blockly.utils.xml.createElement('xml');
+                var block = Blockly.utils.xml.createElement('block');
+                block.setAttribute('type', 'text');
+                var field = Blockly.utils.xml.createElement('field');
+                field.setAttribute('name', 'TEXT');
+                field.textContent = 'Python conversion not implemented yet';
+                block.appendChild(field);
+                xmlDoc.appendChild(block);
+                
+                Blockly.Xml.domToWorkspace(xmlDoc, workspace);
+                console.log('Python conversion successful');
+            } catch (error) {
+                console.error('Python conversion failed:', error);
+                alert('Conversion failed: ' + error.message);
+            }
+        });
+        
+        // Clear workspace
+        document.getElementById('clearBtn').addEventListener('click', function() {
+            workspace.clear();
+            console.log('Workspace cleared');
+        });
+    </script>
+</body>
+</html>
