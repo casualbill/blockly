@@ -154,5 +154,10 @@
   },
   "engines": {
     "node": ">=18"
+  },
+  "pnpm": {
+    "patchedDependencies": {
+      "markdown-tables-to-json@0.1.7": "patches/markdown-tables-to-json@0.1.7.patch"
+    }
   }
 }
