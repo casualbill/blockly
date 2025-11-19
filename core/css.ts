@@ -508,4 +508,221 @@ input[type=number] {
 ) {
   outline: none;
 }
+
+/* Version Control */
+.blocklyVersionControlButton {
+  cursor: pointer;
+  fill: #575E75;
+  opacity: 0.6;
+}
+
+.blocklyVersionControlButton:hover {
+  opacity: 1;
+}
+
+.blocklyVersionControlPanel {
+  position: absolute;
+  background: white;
+  border: 1px solid #ccc;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  z-index: 1000;
+  padding: 12px;
+  min-width: 300px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.blocklyVersionControlTitle {
+  font-weight: bold;
+  font-size: 18px;
+  margin-bottom: 12px;
+  color: #333;
+}
+
+.blocklyVersionControlButtonGroup {
+  margin-bottom: 12px;
+}
+
+.blocklyVersionControlButtonGroup button {
+  margin-right: 8px;
+  margin-bottom: 8px;
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: white;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.blocklyVersionControlButtonGroup button:hover {
+  background: #f5f5f5;
+}
+
+.blocklyVersionList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.blocklyVersionItem {
+  margin-bottom: 8px;
+  padding: 8px;
+  border: 1px solid #eee;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.blocklyVersionItem:hover {
+  background: #f5f5f5;
+}
+
+.blocklyVersionItem.selected {
+  background: #e8f0fe;
+  border-color: #2196F3;
+}
+
+.blocklyVersionInfo {
+  margin: 0;
+  padding: 0;
+}
+
+.blocklyVersionNumber {
+  font-weight: bold;
+  color: #2196F3;
+}
+
+.blocklyVersionDate {
+  font-size: 12px;
+  color: #666;
+}
+
+.blocklyVersionDescription {
+  font-size: 14px;
+  color: #333;
+  margin-top: 4px;
+}
+
+.blocklyVersionControlForm {
+  margin-bottom: 12px;
+}
+
+.blocklyVersionControlForm label {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.blocklyVersionControlForm textarea {
+  width: 100%;
+  height: 80px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  resize: vertical;
+}
+
+.blocklyVersionControlForm button {
+  margin-top: 8px;
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: white;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.blocklyVersionControlForm button:hover {
+  background: #f5f5f5;
+}
+
+.blocklyVersionControlActions {
+  margin-top: 12px;
+  text-align: right;
+}
+
+.blocklyVersionControlActions button {
+  margin-left: 8px;
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: white;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.blocklyVersionControlActions button:hover {
+  background: #f5f5f5;
+}
+
+.blocklyVersionControlActions button.primary {
+  background: #2196F3;
+  color: white;
+  border-color: #2196F3;
+}
+
+.blocklyVersionControlActions button.primary:hover {
+  background: #1976D2;
+}
+
+.blocklyVersionComparePanel {
+  position: absolute;
+  background: white;
+  border: 1px solid #ccc;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  z-index: 1000;
+  padding: 12px;
+  width: 600px;
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+.blocklyVersionCompareTitle {
+  font-weight: bold;
+  font-size: 18px;
+  margin-bottom: 12px;
+  color: #333;
+}
+
+.blocklyVersionCompareContent {
+  display: flex;
+  gap: 24px;
+}
+
+.blocklyVersionCompareSide {
+  flex: 1;
+}
+
+.blocklyVersionCompareSideTitle {
+  font-weight: bold;
+  font-size: 14px;
+  margin-bottom: 8px;
+  color: #666;
+}
+
+.blocklyVersionCompareDiff {
+  margin: 4px 0;
+  padding: 4px;
+  border-radius: 4px;
+  font-size: 12px;
+}
+
+.blocklyVersionCompareDiff.added {
+  background: #e8f5e8;
+  color: #2e7d32;
+}
+
+.blocklyVersionCompareDiff.removed {
+  background: #ffebee;
+  color: #c62828;
+}
+
+.blocklyVersionCompareDiff.modified {
+  background: #fff3e0;
+  color: #ef6c00;
+}
 `;
