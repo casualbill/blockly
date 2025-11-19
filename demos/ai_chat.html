@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blockly AI Chat Demo</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 20px;
+      font-family: Arial, sans-serif;
+    }
+    #blocklyDiv {
+      width: 100%;
+      height: 500px;
+      border: 1px solid #ccc;
+      margin-bottom: 20px;
+    }
+    #outputDiv {
+      padding: 15px;
+      border: 1px solid #ccc;
+      min-height: 100px;
+      background: #f5f5f5;
+    }
+    #controls {
+      margin-bottom: 10px;
+    }
+    button {
+      margin-right: 10px;
+      padding: 8px 15px;
+      font-size: 14px;
+    }
+  </style>
+  <!-- Import Blockly -->
+  <script src="../blockly_compressed.js"></script>
+  <script src="../blocks_compressed.js"></script>
+  <script src="../javascript_compressed.js"></script>
+  <script src="../msg/js/zh-hans.js"></script>
+  <!-- Import AI Chat Module -->
+  <script src="../core/ai_chat.js"></script>
+</head>
+<body>
+  <h1>Blockly AI Chat Demo</h1>
+  <div id="controls">
+    <button onclick="runCode()">运行代码</button>
+    <button onclick="clearOutput()">清除输出</button>
+    <button onclick="window.aiStopGenerate()">停止生成</button>
+    <button onclick="window.aiClearHistory()">清除历史</button>
+    <button onclick="checkModelStatus()">检查模型状态</button>
+  </div>
+  <div id="blocklyDiv"></div>
+  <h2>输出结果:</h2>
+  <div id="outputDiv"></div>
+
+  <!-- Toolbox XML -->
+  <xml id="toolbox" style="display: none">
+    <category name="逻辑" colour="#5C81A6">
+      <block type="controls_if"></block>
+      <block type="logic_compare"></block>
+      <block type="logic_operation"></block>
+    </category>
+    <category name="文本" colour="#5CA65C">
+      <block type="text"></block>
+      <block type="text_append"></block>
+    </category>
+    <category name="AI" colour="#A65C81">
+      <block type="ai_chat"></block>
+      <block type="ai_model_loaded"></block>
+      <block type="ai_clear_history"></block>
+    </category>
+  </xml>
+
+  <script>
+    // Initialize Blockly
+    const workspace = Blockly.inject('blocklyDiv', {
+      toolbox: document.getElementById('toolbox'),
+      language: 'zh-hans'
+    });
+
+    // Run code function
+    async function runCode() {
+      const code = Blockly.JavaScript.workspaceToCode(workspace);
+      const outputDiv = document.getElementById('outputDiv');
+      outputDiv.innerHTML = '正在运行...';
+      try {
+        // Create a promise to handle the async code
+        const result = await eval(code);
+        outputDiv.innerHTML = `<strong>结果:</strong> ${result}`;
+      } catch (error) {
+        outputDiv.innerHTML = `<strong>错误:</strong> ${error.message}`;
+        console.error('Code execution error:', error);
+      }
+    }
+
+    // Clear output
+    function clearOutput() {
+      const outputDiv = document.getElementById('outputDiv');
+      outputDiv.innerHTML = '';
+    }
+
+    // Check model status
+    function checkModelStatus() {
+      const isLoaded = window.aiModelLoaded();
+      const outputDiv = document.getElementById('outputDiv');
+      outputDiv.innerHTML = `<strong>模型状态:</strong> ${isLoaded ? '已加载' : '未加载'}`;
+    }
+  </script>
+</body>
+</html>

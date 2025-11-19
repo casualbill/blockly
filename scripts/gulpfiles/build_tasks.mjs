@@ -109,13 +109,13 @@ const NAMESPACE_PROPERTY = '__namespace__';
 const chunks = [
   {
     name: 'blockly',
-    files: 'core/**/*.js',
+    files: ['core/**/*.js', '!core/ai_chat.js'],
     entry: 'core/blockly.js',
     scriptExport: 'Blockly',
   },
   {
     name: 'blocks',
-    files: 'blocks/**/*.js',
+    files: ['blocks/**/*.js', '!blocks/ai_chat.js'],
     entry: 'blocks/blocks.js',
     scriptExport: 'Blockly.libraryBlocks',
   },
