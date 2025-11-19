@@ -155,6 +155,9 @@ export class BlockSvg
 
   private visuallyDisabled = false;
 
+  /** SVG element for breakpoint. */
+  private breakpointElement_: SVGElement | null = null;
+
   override workspace: WorkspaceSvg;
   // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
   override outputConnection!: RenderedConnection;
@@ -236,6 +239,8 @@ export class BlockSvg
     const svg = this.getSvgRoot();
     if (svg) {
       browserEvents.conditionalBind(svg, 'pointerdown', this, this.onMouseDown);
+      // Add listener for breakpoint clicks
+      browserEvents.conditionalBind(svg, 'click', this, this.onBreakpointClick_);
     }
 
     if (!svg.parentNode) {
@@ -606,6 +611,30 @@ export class BlockSvg
     const gesture = this.workspace.getGesture(e);
     if (gesture) {
       gesture.handleBlockStart(e, this);
+    }
+  }
+
+  /**
+   * Handles a click event on the block's SVG element for breakpoint functionality.
+   * @param e The click event.
+   * @private
+   */
+  private onBreakpointClick_(e: PointerEvent) {
+    // Calculate the left boundary of the block
+    const svgRoot = this.getSvgRoot();
+    if (!svgRoot) return;
+    
+    const rect = svgRoot.getBoundingClientRect();
+    const clickX = e.clientX;
+    const blockLeft = rect.left;
+    
+    // Check if the click was on the left side of the block (breakpoint area)
+    const breakpointAreaWidth = 24;
+    if (clickX < blockLeft + breakpointAreaWidth) {
+      e.stopPropagation();
+      e.preventDefault();
+      // Toggle breakpoint
+      this.setBreakpoint(!this.hasBreakpoint());
     }
   }
 
@@ -1173,8 +1202,56 @@ export class BlockSvg
    *
    * @param highlighted True if highlighted.
    */
-  setHighlighted(highlighted: boolean) {
+ setHighlighted(highlighted: boolean) {
     this.pathObject.updateHighlighted(highlighted);
+  }
+
+  /**
+   * Renders the breakpoint for this block if it has one.
+   * @private
+   */
+  private renderBreakpoint_() {
+    // Remove any existing breakpoint element
+    if (this.breakpointElement_) {
+      dom.removeNode(this.breakpointElement_);
+      this.breakpointElement_ = null;
+    }
+
+    // Create a new breakpoint element if needed
+    if (this.hasBreakpoint()) {
+      const breakpointRadius = 8;
+      const breakpointY = this.height / 2;
+      const breakpointX = -breakpointRadius * 2;
+
+      this.breakpointElement_ = dom.createSvgElement(Svg.CIRCLE, {
+        'cx': breakpointX.toString(),
+        'cy': breakpointY.toString(),
+        'r': breakpointRadius.toString(),
+        'fill': '#ff0000',
+        'stroke': '#ffffff',
+        'stroke-width': '2',
+        'class': 'blocklyBreakpoint'
+      });
+
+      // Add click listener to toggle breakpoint
+      this.breakpointElement_.addEventListener('click', (e) => {
+        e.stopPropagation(); // Prevent block selection
+        this.setBreakpoint(false);
+      });
+
+      // Add the breakpoint element to the block's SVG group
+      this.svgGroup.appendChild(this.breakpointElement_);
+    }
+  }
+
+  /**
+   * Override setBreakpoint to update the rendered breakpoint.
+   */
+  setBreakpoint(breakpoint: boolean) {
+    super.setBreakpoint(breakpoint);
+    if (this.rendered) {
+      this.renderBreakpoint_();
+    }
   }
 
   /**
@@ -1675,6 +1752,9 @@ export class BlockSvg
 
     this.workspace.getRenderer().render(this);
     this.tightenChildrenEfficiently();
+
+    // Render breakpoint
+    this.renderBreakpoint_();
 
     dom.stopTextWidthCache();
   }

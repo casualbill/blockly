@@ -20,6 +20,7 @@
       await loadScript('../node_modules/@blockly/dev-tools/dist/index.js');
 
       var workspace = null;
+      var debugController = null;
 
       function start() {
         setBackgroundColour();
@@ -34,6 +35,7 @@
         var autoimport = !!location.search.match(/autoimport=([^&]+)/);
         // Create main workspace.
         workspace = Blockly.inject('blocklyDiv', {
+          debugger: true,
           comments: true,
           collapse: true,
           disable: true,
@@ -94,6 +96,17 @@
           load();
         }
 
+        // Initialize debug controller
+        debugController = new Blockly.DebugController(workspace);
+        debugController.setExecutionListener((event) => {
+          console.log('Debug event:', event);
+          // Handle debug events here
+        });
+        
+        // Initialize debug toolbar
+        const debugToolbar = new Blockly.DebugToolbar(debugController);
+        debugToolbar.init(document.getElementById('debugToolbar'));
+        
         addEventHandlers();
       }
 
@@ -531,10 +544,17 @@
     <h1>Blockly Playground</h1>
 
     <p>
-      <input id="show" type="button" value="Show" /> -
-      <input id="hide" type="button" value="Hide" /> -
+      <input id="show" type="button" value="Show" /> - 
+      <input id="hide" type="button" value="Hide" /> - 
       <a href="playgrounds/advanced_playground.html">Advanced</a>
     </p>
+    <div id="debugToolbar">
+      <button id="startDebugBtn">开始调试</button>
+      <button id="continueBtn">继续执行</button>
+      <button id="stepBtn">单步执行</button>
+      <button id="stopBtn">停止调试</button>
+      <button id="clearBreakpointsBtn">清除所有断点</button>
+    </div>
 
     <form id="options">
       <select name="dir" onchange="document.forms.options.submit()">
