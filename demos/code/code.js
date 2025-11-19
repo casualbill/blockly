@@ -240,7 +240,7 @@ Code.LANG = Code.getLang();
  * @private
  */
 Code.TABS_ = [
-  'blocks', 'javascript', 'php', 'python', 'dart', 'lua', 'xml', 'json'
+  'blocks', 'javascript', 'php', 'python', 'dart', 'lua', 'swift', 'xml', 'json'
 ];
 
 /**
@@ -248,7 +248,7 @@ Code.TABS_ = [
  * @private
  */
 Code.TABS_DISPLAY_ = [
-  'Blocks', 'JavaScript', 'PHP', 'Python', 'Dart', 'Lua', 'XML', 'JSON'
+  'Blocks', 'JavaScript', 'PHP', 'Python', 'Dart', 'Lua', 'Swift', 'XML', 'JSON'
 ];
 
 Code.selected = 'blocks';
