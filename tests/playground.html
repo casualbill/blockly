@@ -1266,6 +1266,57 @@
           </value>
         </block>
       </category>
+      <category name="HTTP" categorystyle="logic_category">
+        <block type="http_request">
+          <field name="METHOD">GET</field>
+          <field name="URL">"https://example.com"</field>
+          <field name="TIMEOUT">5000</field>
+        </block>
+        <block type="http_response_status">
+          <value name="RESPONSE">
+            <shadow type="variables_get">
+              <field name="VAR">response</field>
+            </shadow>
+          </value>
+        </block>
+        <block type="http_response_body">
+          <value name="RESPONSE">
+            <shadow type="variables_get">
+              <field name="VAR">response</field>
+            </shadow>
+          </value>
+        </block>
+        <block type="http_response_headers">
+          <value name="RESPONSE">
+            <shadow type="variables_get">
+              <field name="VAR">response</field>
+            </shadow>
+          </value>
+        </block>
+        <block type="http_is_success">
+          <value name="RESPONSE">
+            <shadow type="variables_get">
+              <field name="VAR">response</field>
+            </shadow>
+          </value>
+        </block>
+        <block type="http_create_headers"></block>
+        <block type="http_create_body"></block>
+        <block type="http_on_success">
+          <value name="RESPONSE">
+            <shadow type="variables_get">
+              <field name="VAR">response</field>
+            </shadow>
+          </value>
+        </block>
+        <block type="http_on_error">
+          <value name="RESPONSE">
+            <shadow type="variables_get">
+              <field name="VAR">response</field>
+            </shadow>
+          </value>
+        </block>
+      </category>
       <sep></sep>
       <category
         name="Variables"
