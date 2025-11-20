@@ -94,6 +94,7 @@ import * as WidgetDiv from './widgetdiv.js';
 import {Workspace} from './workspace.js';
 import {WorkspaceAudio} from './workspace_audio.js';
 import {ZoomControls} from './zoom_controls.js';
+import {ScratchExportControls} from './scratch_export_controls.js';
 
 /** Margin around the top/bottom/left/right after a zoomToFit call. */
 const ZOOM_TO_FIT_MARGIN = 20;
@@ -340,6 +341,7 @@ export class WorkspaceSvg
   // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
   svgBubbleCanvas_!: SVGElement;
   zoomControls_: ZoomControls | null = null;
+  scratchExportControls_: any | null = null;
 
   /**
    * Navigator that handles moving focus between items in this workspace in
@@ -967,6 +969,17 @@ export class WorkspaceSvg
     this.zoomControls_ = new ZoomControls(this);
     const svgZoomControls = this.zoomControls_.createDom();
     this.svgGroup_.appendChild(svgZoomControls);
+  }
+
+  /**
+   * Add Scratch export controls.
+   *
+   * @internal
+   */
+  addScratchExportControls() {
+    const scratchExportControls = new ScratchExportControls(this);
+    const svgScratchExportControls = scratchExportControls.createDom();
+    this.svgGroup_.appendChild(svgScratchExportControls);
   }
 
   /**

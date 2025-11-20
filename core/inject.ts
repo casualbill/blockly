@@ -180,6 +180,8 @@ function createMainWorkspace(
   if (wsOptions.zoomOptions && wsOptions.zoomOptions.controls) {
     mainWorkspace.addZoomControls();
   }
+  // Add Scratch export controls
+  mainWorkspace.addScratchExportControls();
   // Register the workspace svg as a UI component.
   mainWorkspace
     .getThemeManager()

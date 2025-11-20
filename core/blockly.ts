@@ -224,6 +224,7 @@ import {WorkspaceDragger} from './workspace_dragger.js';
 import {WorkspaceSvg} from './workspace_svg.js';
 import * as Xml from './xml.js';
 import {ZoomControls} from './zoom_controls.js';
+import {ScratchConverter} from './scratch_converter.js';
 
 /**
  * Blockly core version.
@@ -467,6 +468,7 @@ export {
   Extensions,
   LineCursor,
   Procedures,
+  ScratchConverter,
   ShortcutItems,
   Themes,
   Tooltip,
