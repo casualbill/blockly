@@ -45,6 +45,7 @@ import type {FlyoutButton} from './flyout_button.js';
 import {getFocusManager} from './focus_manager.js';
 import {Gesture} from './gesture.js';
 import {Grid} from './grid.js';
+import {Guides} from './guides.js';
 import {MutatorIcon} from './icons/mutator_icon.js';
 import {isAutoHideable} from './interfaces/i_autohideable.js';
 import type {IBoundedElement} from './interfaces/i_bounded_element.js';
@@ -295,6 +296,7 @@ export class WorkspaceSvg
   private readonly highlightedBlocks: BlockSvg[] = [];
   private audioManager: WorkspaceAudio;
   private grid: Grid | null;
+  private guides: Guides;
   private markerManager: MarkerManager;
 
   /**
@@ -386,6 +388,9 @@ export class WorkspaceSvg
       ? new Grid(this.options.gridPattern, options.gridOptions)
       : null;
 
+    /** This workspace's guides object. */
+    this.guides = new Guides(this, this.options.guideOptions);
+
     /** Manager in charge of markers and cursors. */
     this.markerManager = new MarkerManager(this);
 
@@ -441,6 +446,15 @@ export class WorkspaceSvg
    */
   getMarkerManager(): MarkerManager {
     return this.markerManager;
+  }
+
+  /**
+   * Gets the guides for this workspace.
+   *
+   * @returns The guides object.
+   */
+  getGuides(): Guides {
+    return this.guides;
   }
 
   /**

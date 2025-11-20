@@ -57,6 +57,9 @@ export class Options {
    * Created during injection.
    */
   gridPattern: SVGElement | null = null;
+
+  /** The options for rendering guides. */
+  guideOptions: GuideOptions;
   parentWorkspace: WorkspaceSvg | null;
   plugins: {[key: string]: (new (...p1: any[]) => any) | string};
 
@@ -176,6 +179,7 @@ export class Options {
     this.horizontalLayout = horizontalLayout;
     this.languageTree = toolboxJsonDef;
     this.gridOptions = Options.parseGridOptions(options);
+    this.guideOptions = Options.parseGuideOptions(options);
     this.zoomOptions = Options.parseZoomOptions(options);
     this.toolboxPosition = toolboxPosition;
     this.theme = Options.parseThemeOptions(options);
@@ -321,6 +325,42 @@ export class Options {
   }
 
   /**
+   * Parse the user-specified guide options, using reasonable defaults where
+   * behaviour is unspecified.
+   *
+   * @param options Dictionary of options.
+   * @returns Normalized guide options.
+   */
+  private static parseGuideOptions(options: BlocklyOptions): GuideOptions {
+    const guide = options['guides'] || options['guideOptions'] || {};
+    const guideOptions = {} as GuideOptions;
+    guideOptions.enabled =
+      guide['enabled'] !== undefined ? !!guide['enabled'] : true;
+    guideOptions.colour = guide['colour'] || 'rgba(0, 123, 255, 0.5)';
+    guideOptions.width =
+      guide['width'] !== undefined ? Number(guide['width']) : 1;
+    const snapStrength = guide['snapStrength'];
+    if (typeof snapStrength === 'string') {
+      switch (snapStrength.toLowerCase()) {
+        case 'weak':
+          guideOptions.snapStrength = 0;
+          break;
+        case 'strong':
+          guideOptions.snapStrength = 2;
+          break;
+        case 'medium':
+        default:
+          guideOptions.snapStrength = 1;
+          break;
+      }
+    } else {
+      guideOptions.snapStrength =
+        snapStrength !== undefined ? Number(snapStrength) : 1;
+    }
+    return guideOptions;
+  }
+
+  /**
    * Parse the user-specified theme options, using the classic theme as a
    * default. https://developers.google.com/blockly/guides/configure/web/themes
    *
@@ -369,9 +409,17 @@ export namespace Options {
     startScale: number;
     wheel: boolean;
   }
+
+  export interface GuideOptions {
+    enabled?: boolean;
+    colour?: string;
+    width?: number;
+    snapStrength?: number;
+  }
 }
 
 export type GridOptions = Options.GridOptions;
 export type MoveOptions = Options.MoveOptions;
 export type ScrollbarOptions = Options.ScrollbarOptions;
 export type ZoomOptions = Options.ZoomOptions;
+export type GuideOptions = Options.GuideOptions;

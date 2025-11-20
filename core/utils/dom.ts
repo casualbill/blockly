@@ -192,6 +192,24 @@ export function stopTextWidthCache() {
 }
 
 /**
+ * Converts a clientX/Y coordinate to an SVG x/y coordinate.
+ *
+ * @param svg SVG graphics element to convert coordinates for.
+ * @param e Mouse event or object with clientX and clientY properties.
+ * @returns SVG coordinate as an object with x and y properties.
+ */
+export function clientToSvgPoint(
+  svg: SVGGraphicsElement,
+  e: {clientX: number; clientY: number},
+): {x: number; y: number} {
+  const pt = svg.ownerSVGElement!.createSVGPoint();
+  pt.x = e.clientX;
+  pt.y = e.clientY;
+  const transformedPoint = pt.matrixTransform(svg.getScreenCTM()!.inverse());
+  return {x: transformedPoint.x, y: transformedPoint.y};
+}
+
+/**
  * Gets the width of a text element, caching it in the process.
  *
  * @param textElement An SVG 'text' element.

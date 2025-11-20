@@ -63,7 +63,7 @@ import {Svg} from './utils/svg.js';
 import * as svgMath from './utils/svg_math.js';
 import {FlyoutItemInfo} from './utils/toolbox.js';
 import type {Workspace} from './workspace.js';
-import type {WorkspaceSvg} from './workspace_svg.js';
+import {WorkspaceSvg} from './workspace_svg.js';
 
 /**
  * Class for a block's SVG representation.
@@ -448,9 +448,26 @@ export class BlockSvg
    * @internal
    */
   moveDuringDrag(newLoc: Coordinate) {
-    this.translate(newLoc.x, newLoc.y);
+    // Snap to grid and guides
+    let snappedLoc = new Coordinate(newLoc.x, newLoc.y);
+
+    // Get grid and guides from workspace
+    const grid = this.workspace.getGrid();
+    const guides = (this.workspace as WorkspaceSvg).getGuides();
+
+    // First snap to guides (higher priority)
+    if (guides) {
+      snappedLoc = guides.snapToGuides(snappedLoc);
+    }
+
+    // Then snap to grid
+    if (grid?.shouldSnap()) {
+      snappedLoc = grid.alignXY(snappedLoc);
+    }
+
+    this.translate(snappedLoc.x, snappedLoc.y);
     this.getSvgRoot().setAttribute('transform', this.getTranslation());
-    this.updateComponentLocations(newLoc);
+    this.updateComponentLocations(snappedLoc);
   }
 
   /** Snap this block to the nearest grid point. */
