@@ -40,6 +40,7 @@ import * as dropDownDiv from './dropdowndiv.js';
 import {Abstract as AbstractEvent} from './events/events.js';
 import {EventType} from './events/type.js';
 import * as eventUtils from './events/utils.js';
+import {FindReplace} from './find_replace.js';
 import {Flyout} from './flyout_base.js';
 import type {FlyoutButton} from './flyout_button.js';
 import {getFocusManager} from './focus_manager.js';
@@ -197,6 +198,9 @@ export class WorkspaceSvg
 
   /** Horizontal scroll value when scrolling started in pixel units. */
   startScrollX = 0;
+
+  /** The find and replace component for this workspace. */
+  findReplace: FindReplace | null = null;
 
   /** Vertical scroll value when scrolling started in pixel units. */
   startScrollY = 0;
@@ -849,6 +853,11 @@ export class WorkspaceSvg
     // Only the top-level and flyout workspaces should be tabbable.
     getFocusManager().registerTree(this, !!this.injectionDiv || this.isFlyout);
 
+    // Initialize find and replace component
+    if (!this.isFlyout && this.injectionDiv) {
+      this.findReplace = new FindReplace(this);
+    }
+
     return this.svgGroup_;
   }
 
@@ -891,6 +900,11 @@ export class WorkspaceSvg
 
     if (this.grid) {
       this.grid = null;
+    }
+
+    if (this.findReplace) {
+      this.findReplace.dispose();
+      this.findReplace = null;
     }
 
     this.renderer.dispose();

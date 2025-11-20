@@ -1,0 +1,127 @@
+.blocklyFindReplacePanel {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 350px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  padding: 16px;
+  font-family: Arial, sans-serif;
+  color: #333;
+}
+
+.blocklyFindReplaceTitle {
+  font-size: 18px;
+  font-weight: bold;
+  margin: 0 0 16px 0;
+  text-align: center;
+}
+
+.blocklyFindReplaceSection {
+  margin-bottom: 16px;
+}
+
+.blocklyFindReplaceLabel {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.blocklyFindReplaceInput {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.blocklyFindReplaceInput:focus {
+  outline: none;
+  border-color: #1e88e5;
+  box-shadow: 0 0 0 2px rgba(30, 136, 229, 0.2);
+}
+
+.blocklyFindReplaceOptions {
+  margin-bottom: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: center;
+}
+
+.blocklyFindReplaceCheckbox {
+  margin-right: 6px;
+  cursor: pointer;
+}
+
+.blocklyFindReplaceCheckboxLabel {
+  font-size: 14px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.blocklyFindReplaceSelect {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.blocklyFindReplaceSelect:focus {
+  outline: none;
+  border-color: #1e88e5;
+  box-shadow: 0 0 0 2px rgba(30, 136, 229, 0.2);
+}
+
+.blocklyFindReplaceButtons {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.blocklyFindReplaceButton {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.blocklyFindReplaceButton:hover {
+  opacity: 0.9;
+}
+
+.blocklyFindReplaceCount {
+  text-align: center;
+  font-size: 12px;
+  color: #666;
+}
+
+// Style for the find/replace button in toolbar
+.blocklyFindReplaceButton {
+  cursor: pointer;
+  fill: none;
+  stroke: #333;
+  stroke-width: 2;
+  transition: stroke 0.2s ease;
+  width: 24px;
+  height: 24px;
+}
+
+.blocklyFindReplaceButton:hover {
+  stroke: #1e88e5;
+}
+
+// Hide panel by default
+.blocklyFindReplacePanel.hidden {
+  display: none;
+}
