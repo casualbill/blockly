@@ -94,6 +94,8 @@ import * as WidgetDiv from './widgetdiv.js';
 import {Workspace} from './workspace.js';
 import {WorkspaceAudio} from './workspace_audio.js';
 import {ZoomControls} from './zoom_controls.js';
+import {SnapshotManager} from './snapshots.js';
+import {SnapshotButton} from './snapshot_button.js';
 
 /** Margin around the top/bottom/left/right after a zoomToFit call. */
 const ZOOM_TO_FIT_MARGIN = 20;
@@ -218,6 +220,9 @@ export class WorkspaceSvg
 
   /** This workspace's scrollbars, if they exist. */
   scrollbar: ScrollbarPair | null = null;
+
+  /** Snapshot manager for this workspace. */
+  snapshotManager: SnapshotManager | null = null;
 
   /**
    * Fixed flyout providing blocks which may be dragged into this workspace.
@@ -346,6 +351,13 @@ export class WorkspaceSvg
    * response to keyboard navigation commands.
    */
   private navigator = new Navigator();
+
+  /**
+   * Snapshot button for this workspace.
+   */
+  private snapshotButton_: SnapshotButton | null = null;
+
+
 
   /**
    * @param options Dictionary of options.
@@ -967,6 +979,17 @@ export class WorkspaceSvg
     this.zoomControls_ = new ZoomControls(this);
     const svgZoomControls = this.zoomControls_.createDom();
     this.svgGroup_.appendChild(svgZoomControls);
+  }
+
+  /**
+   * Add snapshot button.
+   *
+   * @internal
+   */
+  addSnapshotButton() {
+    this.snapshotButton_ = new SnapshotButton(this);
+    this.snapshotButton_.init();
+    this.svgGroup_.appendChild(this.snapshotButton_.getSvgRoot());
   }
 
   /**

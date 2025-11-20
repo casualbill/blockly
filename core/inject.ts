@@ -180,6 +180,9 @@ function createMainWorkspace(
   if (wsOptions.zoomOptions && wsOptions.zoomOptions.controls) {
     mainWorkspace.addZoomControls();
   }
+
+  // Add snapshot button
+  mainWorkspace.addSnapshotButton();
   // Register the workspace svg as a UI component.
   mainWorkspace
     .getThemeManager()
@@ -197,6 +200,13 @@ function createMainWorkspace(
   WidgetDiv.createDom();
   dropDownDiv.createDom();
   Tooltip.createDom();
+
+  // Initialize snapshot manager
+  mainWorkspace.snapshotManager = new SnapshotManager(mainWorkspace, {
+    autoSaveEnabled: true,
+    autoSaveInterval: 30000,
+    maxSnapshots: 50
+  });
   return mainWorkspace;
 }
 
@@ -261,6 +271,8 @@ function init(mainWorkspace: WorkspaceSvg) {
   if (options.zoomOptions && options.zoomOptions.controls) {
     mainWorkspace.zoomControls_!.init();
   }
+  // Initialize snapshot button
+  mainWorkspace.snapshotButton_!.init();
 
   if (options.moveOptions && options.moveOptions.scrollbars) {
     const horizontalScroll =
