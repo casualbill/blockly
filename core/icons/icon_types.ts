@@ -29,4 +29,5 @@ export class IconType<_T extends IIcon> {
   static MUTATOR = new IconType<MutatorIcon>('mutator');
   static WARNING = new IconType<WarningIcon>('warning');
   static COMMENT = new IconType<ICommentIcon>('comment');
+  static COLLAPSE = new IconType('collapse');
 }

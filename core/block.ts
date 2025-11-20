@@ -1525,8 +1525,9 @@ export class Block {
    * Set whether the block is collapsed or not.
    *
    * @param collapsed True if collapsed.
+   * @param recursive Whether to recursively collapse/expand all child blocks.
    */
-  setCollapsed(collapsed: boolean) {
+  setCollapsed(collapsed: boolean, recursive?: boolean) {
     if (this.collapsed_ !== collapsed) {
       eventUtils.fire(
         new (eventUtils.get(EventType.BLOCK_CHANGE))(
@@ -1538,6 +1539,13 @@ export class Block {
         ),
       );
       this.collapsed_ = collapsed;
+    }
+    // Recursively collapse/expand all child blocks if requested
+    if (recursive) {
+      const children = this.getChildren(false);
+      for (const child of children) {
+        child.setCollapsed(collapsed, recursive);
+      }
     }
   }
 
