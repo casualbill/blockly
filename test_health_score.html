@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Blockly 结构健康指数测试</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/blockly/10.0.0/blockly.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/blockly/10.0.0/blocks.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/blockly/10.0.0/javascript.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+        #blocklyDiv {
+            width: 100%;
+            height: 600px;
+            border: 1px solid #ccc;
+        }
+        .test-buttons {
+            margin-bottom: 20px;
+        }
+        button {
+            margin-right: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Blockly 结构健康指数测试</h1>
+    <div class="test-buttons">
+        <button onclick="addSampleCode()">添加示例代码</button>
+        <button onclick="clearWorkspace()">清空工作区</button>
+    </div>
+    <div id="blocklyDiv"></div>
+
+    <xml id="toolbox" style="display: none;">
+        <category name="逻辑" colour="#5C81A6">
+            <block type="controls_if"></block>
+            <block type="controls_repeat_ext"></block>
+            <block type="controls_whileUntil"></block>
+        </category>
+        <category name="数学" colour="#5CA65C">
+            <block type="math_number"></block>
+            <block type="math_arithmetic"></block>
+            <block type="math_comparison"></block>
+        </category>
+        <category name="文本" colour="#5C5CA6">
+            <block type="text"></block>
+            <block type="text_append"></block>
+        </category>
+        <category name="变量" colour="#A65C5C">
+            <block type="variables_get"></block>
+            <block type="variables_set"></block>
+        </category>
+    </xml>
+
+    <script>
+        // 初始化 Blockly
+        const workspace = Blockly.inject('blocklyDiv', {
+            toolbox: document.getElementById('toolbox'),
+            zoom: {
+                controls: true,
+                wheel: true,
+                startScale: 1.0,
+                maxScale: 3,
+                minScale: 0.3,
+                scaleSpeed: 1.2
+            },
+            trashcan: true
+        });
+
+        // 添加示例代码
+        function addSampleCode() {
+            clearWorkspace();
+            
+            // 创建一个简单的程序
+            const xml = `
+                <xml xmlns="http://www.w3.org/1999/xhtml">
+                    <block type="variables_set" id="1" x="100" y="100">
+                        <field name="VAR">count</field>
+                        <value name="VALUE">
+                            <block type="math_number">
+                                <field name="NUM">0</field>
+                            </block>
+                        </value>
+                        <next>
+                            <block type="controls_repeat_ext" id="2">
+                                <value name="TIMES">
+                                    <block type="math_number">
+                                        <field name="NUM">10</field>
+                                    </block>
+                                </value>
+                                <statement name="DO">
+                                    <block type="variables_set" id="3">
+                                        <field name="VAR">count</field>
+                                        <value name="VALUE">
+                                            <block type="math_arithmetic">
+                                                <field name="OP">ADD</field>
+                                                <value name="A">
+                                                    <block type="variables_get">
+                                                        <field name="VAR">count</field>
+                                                    </block>
+                                                </value>
+                                                <value name="B">
+                                                    <block type="math_number">
+                                                        <field name="NUM">1</field>
+                                                    </block>
+                                                </value>
+                                            </block>
+                                        </value>
+                                        <next>
+                                            <block type="controls_if" id="4">
+                                                <value name="IF0">
+                                                    <block type="math_comparison">
+                                                        <field name="OP">EQ</field>
+                                                        <value name="A">
+                                                            <block type="variables_get">
+                                                                <field name="VAR">count</field>
+                                                            </block>
+                                                        </value>
+                                                        <value name="B">
+                                                            <block type="math_number">
+                                                                <field name="NUM">5</field>
+                                                            </block>
+                                                        </value>
+                                                    </block>
+                                                </value>
+                                                <statement name="DO0">
+                                                    <block type="text_print">
+                                                        <value name="TEXT">
+                                                            <block type="text">
+                                                                <field name="TEXT">Count is 5</field>
+                                                            </block>
+                                                        </value>
+                                                    </block>
+                                                </statement>
+                                            </block>
+                                        </next>
+                                    </block>
+                                </statement>
+                            </block>
+                        </next>
+                    </block>
+                </xml>
+            `;
+            
+            const dom = Blockly.Xml.textToDom(xml);
+            Blockly.Xml.domToWorkspace(dom, workspace);
+        }
+
+        // 清空工作区
+        function clearWorkspace() {
+            workspace.clear();
+        }
+    </script>
+</body>
+</html>

@@ -180,6 +180,8 @@ function createMainWorkspace(
   if (wsOptions.zoomOptions && wsOptions.zoomOptions.controls) {
     mainWorkspace.addZoomControls();
   }
+  // Add health score indicator
+  mainWorkspace.addHealthScore();
   // Register the workspace svg as a UI component.
   mainWorkspace
     .getThemeManager()
