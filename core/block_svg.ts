@@ -38,6 +38,7 @@ import {getFocusManager} from './focus_manager.js';
 import {IconType} from './icons/icon_types.js';
 import {MutatorIcon} from './icons/mutator_icon.js';
 import {WarningIcon} from './icons/warning_icon.js';
+import {CollapseIcon} from './icons/collapse_icon.js';
 import type {Input} from './inputs/input.js';
 import type {IBoundedElement} from './interfaces/i_bounded_element.js';
 import {IContextMenu} from './interfaces/i_contextmenu.js';
@@ -226,6 +227,10 @@ export class BlockSvg
     if (this.initialized) return;
     for (const input of this.inputList) {
       input.init();
+    }
+    // Add collapse icon if not already present
+    if (!this.getIcon(IconType.COLLAPSE)) {
+      this.addIcon(new CollapseIcon(this));
     }
     for (const icon of this.getIcons()) {
       icon.initView(this.createIconPointerDownListener(icon));
@@ -524,12 +529,13 @@ export class BlockSvg
    * Set whether the block is collapsed or not.
    *
    * @param collapsed True if collapsed.
+   * @param recursive Whether to recursively collapse/expand all child blocks.
    */
-  override setCollapsed(collapsed: boolean) {
+  override setCollapsed(collapsed: boolean, recursive?: boolean) {
     if (this.collapsed_ === collapsed) {
       return;
     }
-    super.setCollapsed(collapsed);
+    super.setCollapsed(collapsed, recursive);
     this.updateCollapsed();
   }
 
@@ -583,7 +589,12 @@ export class BlockSvg
       );
     }
 
-    const text = this.toString(internalConstants.COLLAPSE_CHARS);
+    // Get the base text and add child count information
+    let text = this.toString(internalConstants.COLLAPSE_CHARS);
+    const childCount = this.getChildren(false).length;
+    if (childCount > 0) {
+      text += ` (包含${childCount}个子块)`;
+    }
     const field = this.getField(collapsedFieldName);
     if (field) {
       field.setValue(text);

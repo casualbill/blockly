@@ -33,6 +33,9 @@ export enum names {
   PASTE = 'paste',
   UNDO = 'undo',
   REDO = 'redo',
+  COLLAPSE_BLOCK = 'collapse_block',
+  EXPAND_BLOCK = 'expand_block',
+  TOGGLE_BLOCK_COLLAPSE = 'toggle_block_collapse',
 }
 
 /**
@@ -387,6 +390,42 @@ export function registerRedo() {
 }
 
 /**
+ * Keyboard shortcut to toggle block collapse on ctrl+shift+f or cmd+shift+f
+ */
+export function registerToggleCollapseBlock() {
+  const ctrlShiftF = ShortcutRegistry.registry.createSerializedKey(KeyCodes.F, [
+    KeyCodes.CTRL,
+    KeyCodes.SHIFT
+  ]);
+  const metaShiftF = ShortcutRegistry.registry.createSerializedKey(KeyCodes.F, [
+    KeyCodes.META,
+    KeyCodes.SHIFT
+  ]);
+
+  const toggleCollapseShortcut: KeyboardShortcut = {
+    name: names.TOGGLE_BLOCK_COLLAPSE,
+    preconditionFn(workspace, scope) {
+      const focused = scope.focusedNode;
+      return (
+        !workspace.isReadOnly() &&
+        focused != null &&
+        focused instanceof BlockSvg &&
+        !workspace.isDragging() &&
+        !getFocusManager().ephemeralFocusTaken()
+      );
+    },
+    callback(workspace, e, shortcut, scope) {
+      e.preventDefault();
+      const focused = scope.focusedNode as BlockSvg;
+      focused.setCollapsed(!focused.isCollapsed());
+      return true;
+    },
+    keyCodes: [ctrlShiftF, metaShiftF],
+  };
+  ShortcutRegistry.registry.register(toggleCollapseShortcut);
+}
+
+/**
  * Registers all default keyboard shortcut item. This should be called once per
  * instance of KeyboardShortcutRegistry.
  *
@@ -400,6 +439,7 @@ export function registerDefaultShortcuts() {
   registerPaste();
   registerUndo();
   registerRedo();
+  registerToggleCollapseBlock();
 }
 
 registerDefaultShortcuts();
