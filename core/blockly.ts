@@ -434,6 +434,7 @@ Names.prototype.populateProcedures = function (
 // clang-format on
 
 export * from './flyout_navigator.js';
+export * from './health_score.js';
 export * from './interfaces/i_navigation_policy.js';
 export * from './keyboard_nav/block_navigation_policy.js';
 export * from './keyboard_nav/connection_navigation_policy.js';
@@ -620,6 +621,7 @@ export {
   WorkspaceDragger,
   WorkspaceSvg,
   ZoomControls,
+  HealthScore,
   config,
   getFocusManager,
   hasBubble,
