@@ -222,6 +222,9 @@ import {Workspace} from './workspace.js';
 import {WorkspaceAudio} from './workspace_audio.js';
 import {WorkspaceDragger} from './workspace_dragger.js';
 import {WorkspaceSvg} from './workspace_svg.js';
+import {SnapshotManager} from './snapshots.js';
+import {SnapshotPanel} from './snapshot_panel.js';
+import {DiffViewer} from './diff_viewer.js';
 import * as Xml from './xml.js';
 import {ZoomControls} from './zoom_controls.js';
 
@@ -641,4 +644,7 @@ export {
   renderManagement,
   serialization,
   setLocale,
+  SnapshotManager,
+  SnapshotPanel,
+  DiffViewer,
 };
