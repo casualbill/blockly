@@ -19,6 +19,11 @@ export interface BlocklyOptions {
   css?: boolean;
   disable?: boolean;
   grid?: GridOptions;
+
+  /** The options for rendering guides. */
+  guideOptions?: GuideOptions;
+  /** The options for rendering guides. (Deprecated: use guideOptions) */
+  guides?: GuideOptions;
   horizontalLayout?: boolean;
   maxBlocks?: number;
   maxInstances?: {[blockType: string]: number};
@@ -68,4 +73,11 @@ export interface ZoomOptions {
   scaleSpeed?: number;
   startScale?: number;
   wheel?: boolean;
+}
+
+export interface GuideOptions {
+  enabled?: boolean;
+  colour?: string;
+  width?: number;
+  snapStrength?: number | 'weak' | 'medium' | 'strong';
 }
