@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blockly to Scratch Demo</title>
+  <style>
+    body {
+      margin: 0;
+      background-color: #fff;
+      font-family: sans-serif;
+    }
+    h1 {
+      margin: 10px;
+      font-size: 160%;
+    }
+    #blocklyDiv {
+      float: left;
+      width: 80%;
+      height: 600px;
+    }
+    #scratchPreview {
+      float: left;
+      width: 20%;
+      height: 600px;
+      overflow: auto;
+      border-left: 1px solid #ccc;
+      padding: 10px;
+    }
+  </style>
+  <script src="../../dist/blockly_compressed.js"></script>
+  <script src="../../dist/blocks_compressed.js"></script>
+  <script src="../../dist/javascript_compressed.js"></script>
+  <script src="scratch.js"></script>
+</head>
+<body>
+  <h1>Blockly to Scratch Converter</h1>
+  <div id="blocklyDiv"></div>
+  <div id="scratchPreview">
+    <h3>Scratch Preview</h3>
+    <pre id="previewContent"></pre>
+  </div>
+
+  <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox" style="display: none">
+    <category name="Control" colour="%{BKY_LOOPS_HUE}">
+      <block type="controls_if"></block>
+      <block type="controls_repeat_ext">
+        <value name="TIMES">
+          <shadow type="math_number">
+            <field name="NUM">10</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="controls_whileUntil"></block>
+      <block type="controls_for">
+        <value name="FROM">
+          <shadow type="math_number">
+            <field name="NUM">1</field>
+          </shadow>
+        </value>
+        <value name="TO">
+          <shadow type="math_number">
+            <field name="NUM">10</field>
+          </shadow>
+        </value>
+        <value name="BY">
+          <shadow type="math_number">
+            <field name="NUM">1</field>
+          </shadow>
+        </value>
+      </block>
+    </category>
+    <category name="Logic" colour="%{BKY_LOGIC_HUE}">
+      <block type="logic_compare"></block>
+      <block type="logic_operation"></block>
+      <block type="logic_negate"></block>
+      <block type="logic_boolean"></block>
+    </category>
+    <category name="Math" colour="%{BKY_MATH_HUE}">
+      <block type="math_number">
+        <field name="NUM">123</field>
+      </block>
+      <block type="math_arithmetic">
+        <value name="A">
+          <shadow type="math_number">
+            <field name="NUM">1</field>
+          </shadow>
+        </value>
+        <value name="B">
+          <shadow type="math_number">
+            <field name="NUM">1</field>
+          </shadow>
+        </value>
+      </block>
+    </category>
+    <category name="Text" colour="%{BKY_TEXTS_HUE}">
+      <block type="text">
+        <field name="TEXT">Hello</field>
+      </block>
+      <block type="text_join"></block>
+    </category>
+  </xml>
+</body>
+</html>

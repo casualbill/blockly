@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Blockly to Scratch Test</title>
+  <script src="build/src/core/blockly.js"></script>
+  <script src="build/src/blocks/blocks.js"></script>
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+    #blocklyDiv {
+      height: 100%;
+      width: 70%;
+      float: left;
+    }
+    #previewDiv {
+      height: 100%;
+      width: 30%;
+      float: left;
+      border-left: 1px solid #ccc;
+      padding: 10px;
+      box-sizing: border-box;
+      overflow-y: auto;
+    }
+    .preview-title {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+    #jsonPreview {
+      font-family: monospace;
+      font-size: 12px;
+      background: #f5f5f5;
+      padding: 10px;
+      border-radius: 5px;
+      overflow-x: auto;
+    }
+    #downloadBtn {
+      margin-top: 10px;
+      padding: 8px 15px;
+      background: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    #downloadBtn:hover {
+      background: #45a049;
+    }
+  </style>
+</head>
+<body>
+  <div id="blocklyDiv"></div>
+  <div id="previewDiv">
+    <div class="preview-title">Scratch JSON Preview</div>
+    <pre id="jsonPreview">Select blocks in the workspace to see Scratch JSON</pre>
+    <button id="downloadBtn" onclick="downloadScratch()">Download as Scratch</button>
+  </div>
+  <script>
+    // 创建工具箱
+    const toolbox = `
+      <xml xmlns="http://www.w3.org/1999/xhtml">
+        <category name="控制" colour="#5C81A6">
+          <block type="controls_if"></block>
+          <block type="controls_repeat_ext"></block>
+          <block type="controls_whileUntil"></block>
+        </category>
+        <category name="逻辑" colour="#5C81A6">
+          <block type="logic_operation"></block>
+          <block type="logic_compare"></block>
+          <block type="logic_boolean"></block>
+        </category>
+        <category name="数学" colour="#5C81A6">
+          <block type="math_number"></block>
+          <block type="math_arithmetic"></block>
+        </category>
+        <category name="文本" colour="#5C81A6">
+          <block type="text"></block>
+        </category>
+      </xml>
+    `;
+
+    // 注入Blockly
+    const workspace = Blockly.inject('blocklyDiv', {
+      toolbox: toolbox,
+      zoom: {
+        controls: true,
+        wheel: true,
+        startScale: 1.0,
+        maxScale: 3,
+        minScale: 0.3,
+        scaleSpeed: 1.2
+      }
+    });
+
+    // 创建Scratch导出按钮
+    const exportControls = new Blockly.ScratchExportControls(workspace);
+    exportControls.init();
+    exportControls.position();
+
+    // 监听工作区变化，更新JSON预览
+    workspace.addChangeListener(() => {
+      try {
+        const json = Blockly.ScratchConverter.workspaceToScratchJson(workspace);
+        document.getElementById('jsonPreview').textContent = JSON.stringify(json, null, 2);
+      } catch (error) {
+        document.getElementById('jsonPreview').textContent = '转换错误: ' + error.message;
+      }
+    });
+
+    // 下载Scratch文件
+    function downloadScratch() {
+      try {
+        Blockly.ScratchConverter.downloadAsScratch(workspace);
+      } catch (error) {
+        alert('下载错误: ' + error.message);
+      }
+    }
+  </script>
+</body>
+</html>

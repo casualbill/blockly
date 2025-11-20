@@ -1,4 +1,5 @@
 {
+  "tsconfigRootDir": "/Users/casmbp21/Documents/ai-app/code/blockly-wt19",
   "include": ["core/**/*", "blocks/**/*", "generators/**/*"],
   "compilerOptions": {
     // Tells TypeScript to read JS files, as
